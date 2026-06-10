@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQQUALBERRY — 리브랜딩 레퍼런스 리서치</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #111111;
+    --off-white: #F5F3EF;
+    --warm-gray: #9E9890;
+    --light-gray: #E8E5E0;
+    --accent: #C4A882;
+  }
+
+  body {
+    background: var(--off-white);
+    color: var(--black);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* COVER */
+  .cover {
+    height: 100vh;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,168,130,0.15) 0%, transparent 70%);
+  }
+  .cover-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .cover-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    max-width: 700px;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .cover-subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    max-width: 500px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+  .cover-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+  .cover-number {
+    position: absolute;
+    bottom: 80px; right: 80px;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 120px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+  }
+
+  /* NAV / TOC */
+  .toc {
+    padding: 80px;
+    background: white;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .toc-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--light-gray);
+    text-decoration: none;
+    color: var(--black);
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .toc-item:hover { color: var(--accent); }
+  .toc-num {
+    font-size: 11px;
+    color: var(--warm-gray);
+    min-width: 24px;
+  }
+
+  /* SECTION HEADER */
+  .section-intro {
+    padding: 100px 80px 60px;
+    max-width: 800px;
+  }
+  .section-intro h2 {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .section-intro p {
+    font-size: 15px;
+    color: var(--warm-gray);
+    line-height: 1.9;
+  }
+
+  /* BRAND CARD */
+  .brand-section {
+    padding: 0 80px 120px;
+  }
+  .brand-card {
+    border: 1px solid var(--light-gray);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    background: white;
+  }
+  .brand-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 360px;
+  }
+  .brand-info {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .brand-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .brand-name {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .brand-category {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+  }
+  .brand-tagline {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--warm-gray);
+    line-height: 1.7;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 32px;
+  }
+  .brand-visual {
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .brand-visual-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 80px;
+    opacity: 0.15;
+    color: white;
+  }
+  .brand-visual-label {
+    position: absolute;
+    bottom: 20px; left: 20px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .visual-link {
+    position: absolute;
+    bottom: 20px; right: 20px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .visual-link:hover { color: white; border-color: white; }
+
+  /* BODY CONTENT */
+  .brand-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--light-gray);
+  }
+  .brand-block {
+    padding: 40px;
+    border-right: 1px solid var(--light-gray);
+  }
+  .brand-block:last-child { border-right: none; }
+  .block-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 16px;
+  }
+  .block-content {
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: #333;
+  }
+  .block-content ul {
+    list-style: none;
+    padding: 0;
+  }
+  .block-content ul li {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex;
+    gap: 10px;
+  }
+  .block-content ul li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .block-content ul li:last-child { border-bottom: none; }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    background: var(--black);
+    color: white;
+    padding: 40px;
+    margin: 0;
+    border-top: 1px solid var(--light-gray);
+  }
+  .insight-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .insight-text {
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.85);
+  }
+  .insight-text strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* PHOTO GRID */
+  .photo-grid {
+    display: grid;
+    gap: 2px;
+    margin-top: 2px;
+  }
+  .photo-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .photo-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .photo-grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-caption {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--warm-gray);
+    padding: 8px 0;
+    text-align: center;
+  }
+
+  /* COLOR PALETTE VISUAL */
+  .palette {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .palette-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* VISUAL BLOCK — brand color fills */
+  .vblock {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+  }
+  .vblock-text {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(32px, 5vw, 64px);
+    color: white;
+    opacity: 0.9;
+    text-align: center;
+    padding: 24px;
+    line-height: 1.2;
+  }
+  .vblock-sub {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    color: white;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--light-gray);
+    margin: 0 80px;
+  }
+
+  /* SYNTHESIS */
+  .synthesis {
+    padding: 100px 80px;
+    background: var(--black);
+    color: white;
+  }
+  .synthesis-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .synthesis-title {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 60px;
+    max-width: 700px;
+  }
+  .synthesis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .synthesis-item {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 32px;
+  }
+  .synthesis-item-num {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    margin-bottom: -20px;
+  }
+  .synthesis-item-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .synthesis-item-body {
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.7);
+  }
+  .synthesis-item-brands {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .brand-pill {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* APPLY TABLE */
+  .apply-table {
+    padding: 80px;
+    background: white;
+  }
+  .apply-table h3 {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--light-gray);
+    font-weight: 400;
+  }
+  td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--light-gray);
+    vertical-align: top;
+    line-height: 1.7;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--off-white); }
+  td:first-child { font-weight: 500; min-width: 160px; }
+  td.from {
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px 80px;
+    background: var(--black);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 900px) {
+    .cover, .toc, .brand-section, .brand-body, .synthesis, .apply-table { padding: 40px; }
+    .brand-header { grid-template-columns: 1fr; }
+    .brand-visual { height: 280px; }
+    .brand-body { grid-template-columns: 1fr; }
+    .synthesis-grid { grid-template-columns: 1fr; }
+    .brand-block { border-right: none; border-bottom: 1px solid var(--light-gray); }
+    .section-intro { padding: 60px 40px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">EQQUALBERRY · 브랜드 리서치 · 2026</div>
+  <h1 class="cover-title">리브랜딩을 위한<br>13개 브랜드<br>벤치마크 리서치</h1>
+  <p class="cover-subtitle">뷰티·패션·식품·엔터테인먼트 카테고리를 넘나드는 13개 브랜드의 전략, 비주얼 아이덴티티, 커뮤니케이션 방식을 분석하고 이퀄베리 리브랜딩에 적용 가능한 핵심 인사이트를 도출합니다.</p>
+  <div class="cover-meta">CONFIDENTIAL · INTERNAL USE ONLY</div>
+  <div class="cover-number">16</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-label">Contents</div>
+  <div class="toc-grid">
+    <a href="#rhode" class="toc-item"><span class="toc-num">01</span>Rhode</a>
+    <a href="#vacation" class="toc-item"><span class="toc-num">02</span>Vacation</a>
+    <a href="#eadem" class="toc-item"><span class="toc-num">03</span>Eadem</a>
+    <a href="#kiki" class="toc-item"><span class="toc-num">04</span>Kiki World</a>
+    <a href="#futurewise" class="toc-item"><span class="toc-num">05</span>Futurewise</a>
+    <a href="#crown" class="toc-item"><span class="toc-num">06</span>Crown Affair</a>
+    <a href="#oatly" class="toc-item"><span class="toc-num">07</span>Oatly</a>
+    <a href="#glossier" class="toc-item"><span class="toc-num">08</span>Glossier (초기)</a>
+    <a href="#mschf" class="toc-item"><span class="toc-num">09</span>MSCHF</a>
+    <a href="#djerf" class="toc-item"><span class="toc-num">10</span>Djerf Avenue</a>
+    <a href="#moic" class="toc-item"><span class="toc-num">11</span>Museum of Ice Cream</a>
+    <a href="#acne" class="toc-item"><span class="toc-num">12</span>Acne Studios</a>
+    <a href="#a24" class="toc-item"><span class="toc-num">13</span>A24</a>
+    <a href="#kared" class="toc-item"><span class="toc-num">14</span>Kared</a>
+    <a href="#experiment" class="toc-item"><span class="toc-num">15</span>Experiment Beauty</a>
+    <a href="#topicals" class="toc-item"><span class="toc-num">16</span>Topicals</a>
+    <a href="#synthesis" class="toc-item"><span class="toc-num">↓</span>종합 인사이트</a>
+  </div>
+</div>
+
+<!-- ===================== -->
+<!-- 01. RHODE -->
+<!-- ===================== -->
+<div id="rhode" class="section-intro">
+  <h2>스킨케어·뷰티 레퍼런스</h2>
+  <p>뷰티 카테고리에서 브랜드 세계관, 커뮤니티 빌딩, 감각적 마케팅을 탁월하게 구사하는 브랜드들입니다. 이퀄베리가 직접 경쟁하거나, 차별화를 선명하게 드러내야 하는 시장 내 레퍼런스입니다.</p>
+</div>
+
+<div class="brand-section">
+<div id="rhode" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">01 / 16</div>
+        <div class="brand-name">Rhode</div>
+        <div class="brand-category">Skincare · USA</div>
+      </div>
+      <div class="brand-tagline">"Glazed donut skin" — 하나의 감각적 이미지로 카테고리를 재정의하다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">2022년 Hailey Bieber 런칭. 2025년 e.l.f. Beauty에 <strong>10억 달러</strong>에 인수. 런칭 3년 만에 1조원 브랜드로 성장. 2024 Earned Media Value $248M (전년 대비 366% 성장).</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#F5F0E8" title="Cream"></div>
+          <div class="palette-swatch" style="background:#E8D5C4" title="Peach"></div>
+          <div class="palette-swatch" style="background:#C4A882" title="Warm Tan"></div>
+          <div class="palette-swatch" style="background:#9E8E7A" title="Warm Gray"></div>
+          <div class="palette-swatch" style="background:#2B2520" title="Dark Brown"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #E8D0B5 0%, #C4A882 50%, #9E7A5A 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Glazed<br>Donut<br>Skin</div>
+        <div class="vblock-sub">peptide lip · barrier cream · glazing fluid</div>
+      </div>
+      <a href="https://www.rhodeskin.com" target="_blank" class="visual-link">rhodeskin.com ↗</a>
+      <div class="brand-visual-label">비주얼 컬러 팔레트</div>
+    </div>
+  </div>
+
+  <div class="photo-grid cols-3" style="gap:2px;padding:2px;background:#eee">
+    <div style="background:#F0EAE0;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#999;letter-spacing:2px;text-transform:uppercase">Minimalist Packaging</span>
+      <span style="font-size:28px;color:#C4A882">◯</span>
+      <span style="font-size:10px;color:#bbb">matte tube · greige · clean type</span>
+    </div>
+    <div style="background:#E8DDD0;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#999;letter-spacing:2px;text-transform:uppercase">Sensory Marketing</span>
+      <span style="font-size:28px;color:#9E7A5A">◉</span>
+      <span style="font-size:10px;color:#bbb">glazing milk · cinnamon roll · strawberry</span>
+    </div>
+    <div style="background:#DDD0C0;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#999;letter-spacing:2px;text-transform:uppercase">UGC / Founder-Led</span>
+      <span style="font-size:28px;color:#7A6050">◎</span>
+      <span style="font-size:10px;color:#bbb">raw · unscripted · daily routine</span>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>창업자 Hailey Bieber가 브랜드의 첫 번째 콘텐츠 크리에이터로 기능 — 광고가 아닌 '친구의 추천'으로 포지셔닝</li>
+          <li>"Glazed Donut Skin"이라는 하나의 시각적 이미지로 카테고리 재정의</li>
+          <li>UGC 적극 리포스팅 · 댓글 응답 → 커뮤니티 소속감 형성</li>
+          <li>릴리즈마다 음식 감각어 활용 (Glazing Milk, Cinnamon Roll) → 후각·미각 연상</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>소프트 그레이·크림·파스텔 컬러 팔레트 — 세련된 중성 톤</li>
+          <li>매트 패키징 + Bold 클린 타이포그래피</li>
+          <li>매크로 스킨샷, ASMR 어플리케이션, 욕실 씬</li>
+          <li>완벽하지 않은 일상 공간 — 과도하게 연출되지 않은 '진짜' 느낌</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>소셜 퍼스트 전략 → 2024 EMV $248M</li>
+          <li>친근하고 날것의 창업자 스토리텔링</li>
+          <li>음식·감각 언어로 제품 경험을 감성적으로 전달</li>
+          <li>유행에 앞서 비주얼 트렌드를 직접 만들어냄 (트렌드 추종 X)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Rhode가 "Glazed Donut Skin"이라는 하나의 감각적 이미지로 카테고리를 정의한 것처럼, <strong>이퀄베리도 하나의 구체적인 피부 상태 이미지어</strong>를 개발해야 합니다. "임상 검증"이나 "피부 자생력"처럼 기능 중심 언어 대신, 소비자가 즉시 머릿속에 그릴 수 있는 감각적 결과물 언어가 필요합니다. 또한 창업자 또는 제품 개발 스토리를 날것의 방식으로 담아내는 콘텐츠 전략이 유효합니다.</p>
+  </div>
+</div>
+
+<!-- 02. VACATION -->
+<div id="vacation" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">02 / 16</div>
+        <div class="brand-name">Vacation</div>
+        <div class="brand-category">Sunscreen · USA</div>
+      </div>
+      <div class="brand-tagline">기능 카테고리에 '즐거움'이라는 감정을 이식해 시장을 재편하다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Poolside FM에서 파생된 선크림 브랜드. 1980년대 노스탤지어로 선크림에 '재미'를 돌려줌. 2024년 소매 $40M, 2025년 $80M 예상.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FFD700" title="Vintage Yellow"></div>
+          <div class="palette-swatch" style="background:#00BFFF" title="Pool Blue"></div>
+          <div class="palette-swatch" style="background:#FF6B4A" title="Sunset Orange"></div>
+          <div class="palette-swatch" style="background:#F5E6C8" title="Cream"></div>
+          <div class="palette-swatch" style="background:#2D5A27" title="Palm Green"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #FFD700 0%, #FF8C42 50%, #FF6B4A 100%);">
+      <div class="vblock">
+        <div class="vblock-text">The<br>World's Best<br>Smelling<br>Sunscreen</div>
+        <div class="vblock-sub">80s nostalgia · fun · summer vibes</div>
+      </div>
+      <a href="https://www.youmustcreate.com" target="_blank" class="visual-link">vacation.inc ↗</a>
+    </div>
+  </div>
+
+  <div class="photo-grid cols-3" style="gap:2px;padding:2px;background:#eee">
+    <div style="background:#FFD700;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:rgba(0,0,0,0.5);letter-spacing:2px;text-transform:uppercase">80s Typography</span>
+      <span style="font-size:28px;color:rgba(0,0,0,0.3)">Aa</span>
+      <span style="font-size:10px;color:rgba(0,0,0,0.35)">bold retro serif · bright background</span>
+    </div>
+    <div style="background:#FF8C42;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:rgba(255,255,255,0.8);letter-spacing:2px;text-transform:uppercase">Nostalgia Imagery</span>
+      <span style="font-size:28px;color:rgba(255,255,255,0.5)">☀</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.6)">big hair · neon · poolside</span>
+    </div>
+    <div style="background:#00BFFF;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:rgba(255,255,255,0.8);letter-spacing:2px;text-transform:uppercase">Brand World</span>
+      <span style="font-size:28px;color:rgba(255,255,255,0.5)">◈</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.6)">coherent universe · playful</span>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>1990년대 이후 임상화된 선크림 카테고리에서 '재미'라는 포지션을 탈환</li>
+          <li>'Brand World' 구축 — 음악(Poolside FM), 비주얼, 카피 모두 동일한 80년대 세계관</li>
+          <li>성분·SPF 수치 대신 '경험'과 '감정'으로 제품 판매</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>명도 높은 옐로우·블루·오렌지 — 즉각적인 감정 반응 유발</li>
+          <li>1980년대 잡지 미학 — 빈티지 사진, 레트로 타이포</li>
+          <li>노스탤지어 + 현대적 재해석의 정교한 균형</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"세상에서 가장 좋은 냄새의 선크림" — 기능 클레임이 아닌 감각적 클레임</li>
+          <li>카테고리 관습을 역행하는 메시지로 화제성 확보</li>
+          <li>오피스 컬처 패러디, 유머로 타겟 공감대 형성</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Vacation이 "임상/의학" 언어로 굳어진 선크림 카테고리에서 '재미'로 탈출한 것처럼, 이퀄베리도 <strong>과학적 신뢰성을 유지하되 스킨케어 루틴을 일상의 즐거운 의식(ritual)으로 재프레이밍</strong>하는 방법을 연구할 필요가 있습니다. 단, Vacation의 레트로 노스탤지어는 이퀄베리 세계관과 맞지 않음 — 감정의 방향(즐거움·의식·발견)은 가져오되, 비주얼 코드는 이퀄베리 고유의 것으로 개발해야 합니다.</p>
+  </div>
+</div>
+
+<!-- 03. EADEM -->
+<div id="eadem" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">03 / 16</div>
+        <div class="brand-name">Eadem</div>
+        <div class="brand-category">Skincare · USA</div>
+      </div>
+      <div class="brand-tagline">"Health is the only beauty standard" — 철학이 제품을 앞서가는 브랜드</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Alice Lin Glover(대만계 미국인)·Marie Kouadio(프랑스-코트디부아르)가 공동 창업. Smart Melanin™ 기술로 다양한 피부톤을 위한 스킨케어를 임상 검증. "EADEM"은 라틴어로 '동일함'.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#8B4513" title="Deep Brown"></div>
+          <div class="palette-swatch" style="background:#D2691E" title="Warm Sienna"></div>
+          <div class="palette-swatch" style="background:#F5DEB3" title="Wheat"></div>
+          <div class="palette-swatch" style="background:#FFFAF0" title="Floral White"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(160deg, #3D1C02 0%, #8B4513 50%, #D4956A 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Smart<br>Melanin™<br>Beauty</div>
+        <div class="vblock-sub">clinically tested · for all skin tones</div>
+      </div>
+      <a href="https://eadem.co" target="_blank" class="visual-link">eadem.co ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>'Beauty Burden' 개념으로 유색인종 소비자의 고통을 명확히 언어화</li>
+          <li>처음부터 모든 피부 타입·톤에서 임상 검증 → 신뢰 구축</li>
+          <li>화학자·피부과 전문의부터 소비자 테스트까지, 다양성을 제품 개발 과정에 내재화</li>
+          <li>뷰티 저널·에세이 플랫폼 병행 운영으로 브랜드를 문화적 목소리로 확장</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>웜 브라운·아이보리 팔레트 — 피부색의 온기를 반영</li>
+          <li>Lotta Nieminen 디자인 — 심플하면서도 학술적 품위</li>
+          <li>인종·배경이 다른 모델들을 자연스럽게 배치 (억지스러운 다양성 연출 지양)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"우리는 효과적이기 위해 진짜를 선택한다" — 타협 없는 과학 + 진정성</li>
+          <li>창업자 개인 경험담(차별·배제)을 브랜드 기원으로 활용</li>
+          <li>Allure, Forbes 등 편집 미디어를 통한 권위 빌드업</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Eadem이 "Beauty Burden"이라는 개념어로 소비자의 고통을 명확히 언어화한 전략은 이퀄베리에게 중요한 참고점입니다. <strong>이퀄베리도 "Equality"라는 브랜드 네임 필러를 실질적으로 구현하는 철학적 개념어나 프로그램이 필요합니다.</strong> 또한 임상 검증을 '특징'이 아닌 '철학의 증거'로 커뮤니케이션하는 방식을 배울 수 있습니다. 과학 = 모두를 위한 것이라는 등식 구축.</p>
+  </div>
+</div>
+
+<!-- 04. KIKI WORLD -->
+<div id="kiki" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">04 / 16</div>
+        <div class="brand-name">Kiki World</div>
+        <div class="brand-category">Beauty · USA (Web3)</div>
+      </div>
+      <div class="brand-tagline">소비자를 '고객'이 아닌 '공동 창업자'로 만드는 구조적 혁신</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">a16z와 Estée Lauder로부터 $7M 투자 유치. 블록체인 기반 커뮤니티 co-creation 플랫폼. 제품 출시 전 소비자 투표 → 투표자는 제품 지분·리워드 획득.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#E040FB" title="Electric Purple"></div>
+          <div class="palette-swatch" style="background:#00E5FF" title="Electric Cyan"></div>
+          <div class="palette-swatch" style="background:#76FF03" title="Electric Green"></div>
+          <div class="palette-swatch" style="background:#111" title="Black"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #1A0033 0%, #6600CC 50%, #CC00FF 100%);">
+      <div class="vblock">
+        <div class="vblock-text">You<br>Voted<br>for This</div>
+        <div class="vblock-sub">co-creation · ownership · community</div>
+      </div>
+      <a href="https://kikiworld.co" target="_blank" class="visual-link">kikiworld.co ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>소비자가 제품 컬러·디테일에 투표 → 자신이 '만든' 제품 소비</li>
+          <li>투표 횟수에 비례한 리워드 → 반복 참여 유도</li>
+          <li>NFT 기반 멤버십으로 커뮤니티에 실제 소유권 부여</li>
+          <li>판매의 50%+가 최소 1회 이상 투표 참여자에게서 발생</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>일렉트릭 컬러 + 다크 배경 — 테크 브랜드 감성</li>
+          <li>디지털 네이티브 비주얼 언어 — UI가 곧 브랜드</li>
+          <li>투명성·참여가 비주얼로 표현됨 (투표 인터페이스 자체가 마케팅)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>제품 발표 이전부터 커뮤니티가 만들어짐 → 론칭 = 축하 이벤트</li>
+          <li>참여 행위 자체를 콘텐츠화 (누가 투표했나, 무엇이 이겼나)</li>
+          <li>테크 벤처 언어와 뷰티 감성을 병행 구사</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Kiki World의 핵심은 <strong>참여를 구조적으로 설계한다</strong>는 것입니다. 이퀄베리는 "Question"이라는 브랜드 DNA를 실제 소비자 참여 메커니즘으로 연결할 수 있습니다. 예: "다음 성분은 당신이 선택합니다" 캠페인, 커뮤니티 질문 기반 신제품 개발 공개, 소비자 피드백이 실제 포뮬라에 반영되는 스토리. 블록체인 기술 없이도 '참여의 구조화'는 가능합니다.</p>
+  </div>
+</div>
+
+<!-- 05. FUTUREWISE -->
+<div id="futurewise" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">05 / 16</div>
+        <div class="brand-name">Futurewise</div>
+        <div class="brand-category">Skincare · USA</div>
+      </div>
+      <div class="brand-tagline">슬러깅(Slugging)을 문화로 — 피부 과학 트렌드를 대중화하는 방식</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Starface 공동창업자 Julie Schott·Brian Bordainick의 두 번째 브랜드. 피부과 의사들이 수십 년간 권장해온 '슬러깅' 루틴을 브랜드화. DTC → Target 확장.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FF69B4" title="Hot Pink"></div>
+          <div class="palette-swatch" style="background:#98FF98" title="Mint Green"></div>
+          <div class="palette-swatch" style="background:#F0E68C" title="Khaki"></div>
+          <div class="palette-swatch" style="background:#FFF" title="White"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FFB6C1 100%);">
+      <div class="vblock">
+        <div class="vblock-text">The<br>Slug<br>Life</div>
+        <div class="vblock-sub">slugging · dermatologist-loved · hydration</div>
+      </div>
+      <a href="https://futurewise.world" target="_blank" class="visual-link">futurewise.world ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>창업자 개인 아이덴티티에서 벗어난 '세계관' 중심 브랜딩</li>
+          <li>슬러깅이라는 이미 존재하는 행동을 브랜드가 소유</li>
+          <li>귀엽고 의외적인 마스코트(민달팽이)로 거부감을 제거</li>
+          <li>피부과학을 재미있게 — 전문성을 유머로 포장</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>핫핑크 + 카툰 슬러그 마스코트 — 과학 브랜드의 완전한 반전</li>
+          <li>자연 이미지(버섯·식물)와 결합 → 유기적 유머</li>
+          <li>과학적 신뢰와 장난스러운 비주얼의 공존</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"I am the icon" — 마스코트가 직접 말하는 페르소나</li>
+          <li>피부과 전문 용어를 일상 언어로 번역</li>
+          <li>트렌드 행동(슬러깅)을 브랜드가 먼저 '정의'함으로써 카테고리 선점</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Futurewise의 핵심 교훈: <strong>과학 브랜드가 진지하게만 보일 필요는 없다.</strong> 이퀄베리는 임상 검증을 강조하면서도 비주얼과 톤에서 따뜻함과 접근성을 잃지 않아야 합니다. 또한 '피부 자생력', '루틴화' 같은 개념을 소비자가 직접 실천하는 구체적 행동(ritual)과 연결지어 이퀄베리가 그 행동을 정의하고 소유하는 전략이 필요합니다.</p>
+  </div>
+</div>
+
+<!-- 06. CROWN AFFAIR -->
+<div id="crown" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">06 / 16</div>
+        <div class="brand-name">Crown Affair</div>
+        <div class="brand-category">Haircare · USA</div>
+      </div>
+      <div class="brand-tagline">헤어케어를 '일상의 의식'으로 재정의한 미니멀리스트 브랜드</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Dianna Cohen 창업. 세이지 그린 팔레트, 큐레이션된 제품군, 매스 인플루언서 회피. "cashmere sweatpants of haircare"로 불림.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#8BA888" title="Sage Green"></div>
+          <div class="palette-swatch" style="background:#C5BCA8" title="Warm Stone"></div>
+          <div class="palette-swatch" style="background:#E8E0D5" title="Linen"></div>
+          <div class="palette-swatch" style="background:#F7F4F0" title="Off White"></div>
+          <div class="palette-swatch" style="background:#2C2C2C" title="Near Black"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #2D4A2D 0%, #8BA888 50%, #C5BCA8 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Hair<br>as a<br>Ritual</div>
+        <div class="vblock-sub">sage green · minimalist · intention</div>
+      </div>
+      <a href="https://www.crownaffair.com" target="_blank" class="visual-link">crownaffair.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>제품 수를 의도적으로 최소화 → 과잉 없는 큐레이션</li>
+          <li>'Visual Literacy' — 모든 터치포인트의 완벽한 시각적 일관성</li>
+          <li>트렌드 주도 인플루언서 회피 → 브랜드 자연스럽게 정렬된 크리에이터만</li>
+          <li>장기적 브랜드 에쿼티 > 단기 바이럴</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>세이지 그린 + 스톤 + 리넨 — 자연·의식·고요함</li>
+          <li>모노크롬 패키징 + 세련된 미니멀 포토그래피</li>
+          <li>고요한 색조의 웹사이트 — 경험 자체가 브랜드</li>
+          <li>멀티펑셔널 제품 → 단순함의 철학을 제품에도 구현</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"단순함과 의도" — 말이 적을수록 브랜드가 강해짐</li>
+          <li>구전 + 유기적 추천 중심 → 구매자가 곧 신도가 됨</li>
+          <li>'의식(ritual)'이라는 단어로 루틴을 특별하게 격상</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Crown Affair의 세이지 그린 팔레트와 미니멀 비주얼은 이퀄베리의 "일상 틈새의 순간" 비주얼 방향과 직접적으로 공명합니다. 특히 <strong>'루틴'이 아닌 '의식(ritual)'으로의 언어 업그레이드</strong>, 제품 수 최소화를 통한 포커스 강화, 그리고 일관된 시각적 일관성(Visual Literacy) 개념은 이퀄베리 세럼 중심 포지셔닝에 직접 적용 가능합니다.</p>
+  </div>
+</div>
+
+<!-- 14. KARED -->
+<div id="kared" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">14 / 16</div>
+        <div class="brand-name">Kared</div>
+        <div class="brand-category">Skincare · USA</div>
+      </div>
+      <div class="brand-tagline">"Slow down in a world that never does" — 의도적 자기돌봄을 브랜드 철학으로</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">럭셔리 내추럴 스킨케어. 창업자 개인의 스킨케어 여정에서 탄생 — 거울 앞에서 확신이 없던 시절, 루틴이 자신감의 시작이 됐다는 이야기. 브랜드 명 "Kared"는 "care"에서 직접 파생.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#7A5C3A" title="Warm Earth"></div>
+          <div class="palette-swatch" style="background:#B8956A" title="Honey"></div>
+          <div class="palette-swatch" style="background:#E5D5C0" title="Sand"></div>
+          <div class="palette-swatch" style="background:#F5EFE6" title="Cream"></div>
+          <div class="palette-swatch" style="background:#2E2218" title="Deep Brown"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(160deg, #1C1008 0%, #7A5C3A 50%, #E5D5C0 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Slow<br>Down.</div>
+        <div class="vblock-sub">intentional care · heal · restore · align</div>
+      </div>
+      <a href="https://karedskin.com" target="_blank" class="visual-link">karedskin.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>창업자의 취약성(vulnerability)을 브랜드 기원으로 — 자신감 부재 → 루틴 → 변화의 서사</li>
+          <li>"의도적으로 자신을 돌봄(care intentionally)"을 제품이 아닌 가치로 판매</li>
+          <li>럭셔리이되 접근 가능한 — "모두를 위한 럭셔리 + 자연"의 조합</li>
+          <li>속도와 생산성 중심 문화에 대한 조용한 저항</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>웜 어스 팔레트 — 흙·꿀·모래·크림, 자연의 온도감</li>
+          <li>느린 시간, 고요한 공간의 감성 — 과잉 자극 없는 시각 언어</li>
+          <li>치유·회복·정렬(aligned)이라는 감성을 컬러로 표현</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>제품 기능보다 감정 상태 변화를 이야기 — "사용 전/후"가 아닌 "상태의 변화"</li>
+          <li>"held, restored, aligned" — 피부 관리를 감정·심리적 회복으로 연결</li>
+          <li>클린 성분 + 실제 결과를 조용하게 강조 (과장 없는 진정성)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Kared의 "Slow down" 철학은 이퀄베리의 "일상 틈새의 순간" 비주얼 방향과 직접 연결됩니다. <strong>스킨케어 루틴을 '생산성 루틴'이 아닌 '회복의 의식'으로 포지셔닝하는 언어 전략</strong>은 이퀄베리의 "Thoughtful choices, everyday vitality that lasts"와 공명합니다. 또한 창업자의 취약한 개인 서사를 브랜드 기원으로 삼는 방식은 이퀄베리가 창업 스토리를 어떻게 구성할지에 대한 참고가 됩니다.</p>
+  </div>
+</div>
+
+<!-- 15. EXPERIMENT BEAUTY -->
+<div id="experiment" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">15 / 16</div>
+        <div class="brand-name">Experiment Beauty</div>
+        <div class="brand-category">Skincare · USA · Gen Z</div>
+      </div>
+      <div class="brand-tagline">"Science = cool, accessible, fun, absurd" — 과학을 반항적으로 재브랜딩하다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">두 명의 화학자 창업 (Lisa Guerrera · Emmy Ketcham). "Super Saturated" 세럼으로 TikTok 바이럴 → 1만명 대기 리스트. 커뮤니티 "Lab Rats", 인하우스 포뮬레이션 랩 "Lab X" 운영. $1M 펀딩 후 리론칭.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#00FF87" title="Electric Green"></div>
+          <div class="palette-swatch" style="background:#A8FF78" title="Lime"></div>
+          <div class="palette-swatch" style="background:#F0F0F0" title="Off White"></div>
+          <div class="palette-swatch" style="background:#1A1A2E" title="Deep Navy"></div>
+          <div class="palette-swatch" style="background:#FF6B9D" title="Hot Pink"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #0A0A1A 0%, #1A2A1A 40%, #003300 80%, #00FF87 100%);">
+      <div class="vblock">
+        <div class="vblock-text" style="color:#00FF87;font-size:56px">Science<br>is<br>Weird.</div>
+        <div class="vblock-sub">lab rats · planet X · chemist approved</div>
+      </div>
+      <a href="https://experimentbeauty.com" target="_blank" class="visual-link">experimentbeauty.com ↗</a>
+    </div>
+  </div>
+
+  <div class="photo-grid cols-3" style="gap:2px;padding:2px;background:#0A0A1A">
+    <div style="background:#0A2A0A;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#00FF87;letter-spacing:2px;text-transform:uppercase">Lab X Community</span>
+      <span style="font-size:24px;color:rgba(0,255,135,0.4)">⬡</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.4)">lab sample drops · early access</span>
+    </div>
+    <div style="background:#1A1A0A;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#A8FF78;letter-spacing:2px;text-transform:uppercase">Avant Guard</span>
+      <span style="font-size:24px;color:rgba(168,255,120,0.4)">◈</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.4)">bright green reusable sheet mask</span>
+    </div>
+    <div style="background:#0A0A2A;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#FF6B9D;letter-spacing:2px;text-transform:uppercase">TikTok Viral</span>
+      <span style="font-size:24px;color:rgba(255,107,157,0.4)">◎</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.4)">10K waitlist · super saturated serum</span>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>"과학을 쿨하게" — 복잡한 스킨케어 관습을 웃음으로 해체</li>
+          <li>창업자 둘 다 화학자 → 전문성을 권위가 아닌 유머로 포장</li>
+          <li>Lab X(인하우스 랩) 커뮤니티 → 출시 전 샘플 드롭으로 팬덤 구축</li>
+          <li>TikTok 70% 유입 → 바이럴 설계된 제품명·질감 (Super Saturated)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>일렉트릭 그린 + 딥 네이비 — 미래적·실험실·외계 감성</li>
+          <li>"Very Online™" 감성 — 픽셀·크롬·인터넷 미학</li>
+          <li>Avant Guard 밝은 초록 시트 마스크 → 제품 자체가 비주얼 아이콘</li>
+          <li>크롬 소재 아이콘 — 과학을 오브제로</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"Lab Rats" — 소비자를 실험 공동체로 호명, 소속감 부여</li>
+          <li>"Planet X의 날씨는 좋습니다" — 뉴스레터가 세계관 확장</li>
+          <li>성분 농도(30% 글리세린)를 직접 자랑 → 투명성이 바이럴 포인트</li>
+          <li>제품명이 카피: Super Saturated, Buffer Jelly, Plasma Wash</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Experiment Beauty는 이퀄베리에게 가장 직접적인 경쟁·참고 브랜드 중 하나입니다. 둘 다 '과학 기반 세럼 중심' 포지셔닝이지만, Experiment는 유머·외계·인터넷 미학으로, 이퀄베리는 질문·발견·일상의 품위로 접근합니다. <strong>핵심 차이점: 이퀄베리는 Experiment보다 더 성숙하고 일상적인 감성을 가져가야 합니다.</strong> 그러나 "Lab X"식 출시 전 커뮤니티 사전 참여, 성분 농도를 자신 있게 공개하는 투명성, 제품명 자체를 카피로 만드는 네이밍 전략은 직접 채용할 수 있습니다.</p>
+  </div>
+</div>
+
+<!-- 16. TOPICALS -->
+<div id="topicals" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">16 / 16</div>
+        <div class="brand-name">Topicals</div>
+        <div class="brand-category">Skincare · USA · BIPOC</div>
+      </div>
+      <div class="brand-tagline">피부 고민을 숨기지 않고 — 문화로 만든다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Olamide Olowe 창업(2020). 흑인 여성 최연소 $1,000만 투자 유치. 습진·색소침착·여드름 등 만성 피부 고민 + 정신건강 옹호. Angel Reese·Rema 등 문화 파워브로커 투자. 2024 가나 인플루언서 트립 화제.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FF1493" title="Deep Pink"></div>
+          <div class="palette-swatch" style="background:#FFB347" title="Warm Orange"></div>
+          <div class="palette-swatch" style="background:#98FB98" title="Pale Green"></div>
+          <div class="palette-swatch" style="background:#DDA0DD" title="Plum"></div>
+          <div class="palette-swatch" style="background:#1A1A1A" title="Black"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #1A0020 0%, #8B0057 50%, #FF1493 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Skin<br>Is<br>Culture.</div>
+        <div class="vblock-sub">mental health · chronic conditions · BIPOC · community</div>
+      </div>
+      <a href="https://thetopicals.com" target="_blank" class="visual-link">thetopicals.com ↗</a>
+    </div>
+  </div>
+
+  <div class="photo-grid cols-2" style="gap:2px;padding:2px;background:#111">
+    <div style="background:#FF1493;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:rgba(255,255,255,0.9);letter-spacing:2px;text-transform:uppercase">Ghana Trip 2024</span>
+      <span style="font-size:28px">🌍</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.7)">Faded Under Eye Mask · 공공장소 착용 트렌드</span>
+    </div>
+    <div style="background:#1A0020;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:11px;color:#DDA0DD;letter-spacing:2px;text-transform:uppercase">Cultural Investors</span>
+      <span style="font-size:28px;color:rgba(221,160,221,0.5)">◈</span>
+      <span style="font-size:10px;color:rgba(255,255,255,0.4)">Angel Reese · Rema · tastemakers not just money</span>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>만성 피부 고민을 "숨겨야 할 결함"이 아닌 문화적 정체성의 일부로 재프레이밍</li>
+          <li>피부 + 정신건강을 함께 다루는 브랜드 포지션 — 케어의 범위를 확장</li>
+          <li>BIPOC 크리에이터 중심 콘텐츠 → 대표성이 마케팅 전략</li>
+          <li>투자자가 곧 문화 대사 (Angel Reese, Rema) — 돈이 아닌 문화 자본</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>밝은 핑크·오렌지·퍼플 — 만성 피부 고민 브랜드의 반전 (어둡지 않다)</li>
+          <li>Faded Under Eye Mask의 핑크 컬러 → 착용 자체가 패션·트렌드</li>
+          <li>제품이 얼굴에 붙어 있는 상태를 '공공 착용 가능'으로 만든 설계</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>가나 트립 — 브랜드 여행이 문화 탐험이 되고, 제품이 그 문화 속에 자연스럽게 등장</li>
+          <li>힙합·시네마틱 캠페인 → 스킨케어가 아닌 패션 브랜드처럼 접근</li>
+          <li>Sephora + Amazon + DTC 균형 배분 — 채널 리스크 의도적 분산</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Topicals의 핵심 교훈은 <strong>"제품의 카테고리(만성 피부 고민)를 부끄러움에서 자긍심으로 전환"</strong>하는 재프레이밍입니다. 이퀄베리도 "노화"나 "피부 고민"을 결핍의 언어가 아닌 일상의 탐구·발견으로 재프레이밍해야 합니다. 또한 Topicals의 문화 자본 투자자 전략(단순 투자자가 아닌 문화 대사)과 가나 트립처럼 '브랜드 세계관이 실제 공간·문화와 결합'하는 캠페인 방식은 이퀄베리의 해외 시장 확장 캠페인 기획에 직접 활용 가능합니다.</p>
+  </div>
+</div>
+
+</div><!-- /brand-section -->
+
+<div class="divider"></div>
+
+<!-- ===================== -->
+<!-- 07. OATLY -->
+<!-- ===================== -->
+<div class="section-intro">
+  <h2>카테고리 파괴자 레퍼런스</h2>
+  <p>카테고리의 관습을 깨고, 브랜드의 '목소리'로 시장 자체를 바꾼 브랜드들. 이퀄베리가 스킨케어 카테고리에서 '질문하는 브랜드'로 자리잡기 위한 커뮤니케이션 전략의 참고점.</p>
+</div>
+
+<div class="brand-section">
+
+<div id="oatly" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">07 / 16</div>
+        <div class="brand-name">Oatly</div>
+        <div class="brand-category">Food & Beverage · Sweden</div>
+      </div>
+      <div class="brand-tagline">패키징이 선언문이 되고, 브랜드가 운동이 되다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">연매출 약 $840M. 20개 이상 시장 진출. 오트밀크를 반항적 선언으로 만든 브랜드. "WOW! NO COW!"로 요약되는 도발적 패키징 카피.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#F5E642" title="Oatly Yellow"></div>
+          <div class="palette-swatch" style="background:#3D3D3D" title="Dark Gray"></div>
+          <div class="palette-swatch" style="background:#F5F0E0" title="Oat Cream"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #1A1A1A 0%, #3D3D3D 40%, #F5E642 100%);">
+      <div class="vblock">
+        <div class="vblock-text" style="color:#F5E642">WOW!<br>NO<br>COW!</div>
+        <div class="vblock-sub" style="color:rgba(255,255,255,0.5)">hand-drawn type · rebellious · direct</div>
+      </div>
+      <a href="https://www.oatly.com" target="_blank" class="visual-link">oatly.com ↗</a>
+    </div>
+  </div>
+
+  <div class="photo-grid cols-2" style="gap:2px;padding:2px;background:#222">
+    <div style="background:#F5E642;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+      <span style="font-size:36px;font-family:serif;font-weight:bold;color:#1A1A1A">It's like milk,<br>but made for humans.</span>
+    </div>
+    <div style="background:#1A1A1A;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px">
+      <span style="font-size:11px;color:#F5E642;letter-spacing:3px;text-transform:uppercase">Hand-drawn Typography</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.5)">Custom irregular letterforms</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.5)">Anti-corporate aesthetic</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.5)">High contrast · direct headlines</span>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>"우유보다 오틀리를 마셔야 하는 이유"를 전략 코어로 → 경쟁 구도를 브랜드가 설정</li>
+          <li>패키징 자체를 미디어로 활용 — 선반에서도 대화 시작</li>
+          <li>반기업적 어조로 대기업 대비 신뢰 획득</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>커스텀 손글씨 타이포그래피 → 즉각적 인식 + 반산업적 감성</li>
+          <li>옐로우·다크 그레이의 하이콘트라스트 — 선반에서 강렬한 존재감</li>
+          <li>낙서·드로잉·자기 비하적 유머로 인간적 브랜드성 확보</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>불경스럽고 자기 참조적(self-referential)인 카피 — 광고가 광고를 조롱</li>
+          <li>지속가능성을 선언적으로, 유머를 무기로</li>
+          <li>온·오프 채널 전반에서 완전한 톤 일관성</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">이퀄베리의 "Good question. Our formula shows up for you."라는 태그라인은 Oatly식 직설적 선언에 가깝습니다. Oatly에서 배울 점은 <strong>브랜드의 '목소리(voice)'를 패키징·웹사이트·소셜 모두에서 완전히 동일하게 유지하는 것</strong>입니다. 또한 스킨케어 카테고리의 당연한 것들(노화 방지 언어, 완벽한 피부 연출)에 직접적으로 이의를 제기하는 선언적 카피를 개발하면 Oatly식 차별화가 가능합니다.</p>
+  </div>
+</div>
+
+<!-- 08. GLOSSIER 초기 -->
+<div id="glossier" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">08 / 16</div>
+        <div class="brand-name">Glossier (초기)</div>
+        <div class="brand-category">Skincare/Beauty · USA</div>
+      </div>
+      <div class="brand-tagline">블로그로 커뮤니티를 먼저 만들고 — 그 커뮤니티가 브랜드가 되다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Into The Gloss(2010) → Glossier 런칭(2014). 4년간 월 방문자 2~3M의 커뮤니티 구축 후 첫 제품 4개 출시. "Democratic Beauty" 개념 창안.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FFB5CB" title="Millennial Pink"></div>
+          <div class="palette-swatch" style="background:#F5F0F0" title="Off White"></div>
+          <div class="palette-swatch" style="background:#E8D5D0" title="Blush"></div>
+          <div class="palette-swatch" style="background:#C4A5A0" title="Dusty Rose"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #FFB5CB 0%, #E8A0B5 50%, #D4809A 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Skin First.<br>Makeup<br>Second.</div>
+        <div class="vblock-sub">into the gloss · democratic beauty · community</div>
+      </div>
+      <a href="https://www.glossier.com" target="_blank" class="visual-link">glossier.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>제품 이전에 커뮤니티 — 4년간 Into The Gloss 독자 2~3M 형성</li>
+          <li>"드림 페이스워시"를 독자에게 공개 물음 → 300개 댓글이 제품 스펙이 됨</li>
+          <li>고객이 제품 개발자이자 홍보대사가 되는 선순환 구조</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>밀레니얼 핑크 — 세대를 정의하는 컬러가 됨</li>
+          <li>기포 랩 패키징 + 스티커 → '공유하고 싶은' 패키징</li>
+          <li>보정 없는 다양한 피부 사진 — '진짜' 미의 민주화</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>"당신은 이미 충분히 예쁩니다" → 결핍을 자극하지 않는 카피</li>
+          <li>에디터리얼 콘텐츠로 신뢰 먼저, 판매 나중</li>
+          <li>댓글이 마케팅 리서치이자 소속감의 도구</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Glossier 초기가 Into The Gloss라는 미디어로 먼저 신뢰를 쌓은 것처럼, <strong>이퀄베리의 "Question"·"Quest" DNA는 콘텐츠 미디어 전략에 직접 연결됩니다.</strong> 이퀄베리가 먼저 "당신의 피부에 대한 질문"을 수집하고, 그 질문에 과학적으로 답하는 콘텐츠를 쌓아가는 구조라면 — 제품 출시가 곧 커뮤니티가 기다려온 '답변'이 됩니다. 또한 고객 리뷰·피드백을 제품 개발 과정에 공개적으로 연결하는 전략도 유효합니다.</p>
+  </div>
+</div>
+
+</div><!-- /brand-section -->
+
+<div class="divider"></div>
+
+<!-- ===================== -->
+<!-- 09. MSCHF -->
+<!-- ===================== -->
+<div class="section-intro">
+  <h2>문화·세계관 빌더 레퍼런스</h2>
+  <p>제품이 아닌 '세계관'을 팔고, 팬덤을 만들고, 문화적 대화를 주도하는 브랜드들. 이퀄베리의 브랜드가 단순한 스킨케어를 넘어 하나의 문화적 관점이 되는 것에 대한 영감.</p>
+</div>
+
+<div class="brand-section">
+
+<div id="mschf" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">09 / 16</div>
+        <div class="brand-name">MSCHF</div>
+        <div class="brand-category">Art Collective · USA</div>
+      </div>
+      <div class="brand-tagline">2주마다 인터넷을 뒤흔드는 하나의 문장 — 혼돈을 자산으로 만드는 전략</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">2018년 브루클린 설립. 2주마다 하나의 '드롭' 출시. 각 드롭은 "한 문장으로 이해되고, 세 문장으로 더 깊이 파고드는" 개념으로 설계. "30초 만에 100만 달러" 매출 달성 사례.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FF0000" title="MSCHF Red"></div>
+          <div class="palette-swatch" style="background:#000000" title="Black"></div>
+          <div class="palette-swatch" style="background:#FFFFFF" title="White"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: #111;">
+      <div class="vblock">
+        <div class="vblock-text" style="color:#FF0000">MSCHF</div>
+        <div class="vblock-sub">chaos as brand · drops · viral by design</div>
+      </div>
+      <a href="https://mschf.com" target="_blank" class="visual-link">mschf.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>희소성 + 예측 불가능성 → 각 드롭이 '이벤트'가 됨</li>
+          <li>한 문장으로 이해되는 개념 → 바이럴 설계의 기본</li>
+          <li>인플루언서 광고 없이 작품의 입소문만으로 마케팅</li>
+          <li>사회 비판적 서브텍스트 → 단순한 제품이 아닌 아이디어 판매</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>드롭마다 다른 비주얼 → 일관성이 '없는 것'이 일관성</li>
+          <li>레드·블랙·화이트의 강렬한 기본 팔레트</li>
+          <li>예술·유머·도발을 넘나드는 이미지 언어</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>소셜 상의 비활동 → 오히려 신비감 극대화</li>
+          <li>작품 자체가 미디어 — 보도 없이도 뉴스가 됨</li>
+          <li>사회적 논란을 의도적으로 설계 → 대화의 중심에 위치</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">MSCHF의 "한 문장으로 이해되는 개념" 원칙은 이퀄베리 모든 커뮤니케이션에 적용 가능한 리트머스 테스트입니다. <strong>신제품 출시, 캠페인, SNS 콘텐츠를 한 문장으로 설명할 수 없다면 다시 설계해야 합니다.</strong> 또한 MSCHF의 드롭 문화 — 기다림·희소성·이벤트화 — 는 이퀄베리의 신제품 또는 시즌 캠페인 론칭 방식에 영향을 줄 수 있습니다.</p>
+  </div>
+</div>
+
+<!-- 10. DJERF AVENUE -->
+<div id="djerf" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">10 / 16</div>
+        <div class="brand-name">Djerf Avenue</div>
+        <div class="brand-category">Fashion · Sweden</div>
+      </div>
+      <div class="brand-tagline">창업자의 일상이 그 자체로 브랜드가 된 스칸디나비안 라이프스타일 제국</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Matilda Djerf 창업(2019). 5년 만에 약 $36M 브랜드로 성장. "우리 사진은 보정하지 않습니다" 원칙. 포르투갈·이탈리아·스웨덴 공장, 타임리스 디자인 철학. (2024년 말 내부 이슈로 위기 맞음)</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#F5E6D0" title="Warm Cream"></div>
+          <div class="palette-swatch" style="background:#D4C4B0" title="Sand"></div>
+          <div class="palette-swatch" style="background:#8C7B6B" title="Warm Brown"></div>
+          <div class="palette-swatch" style="background:#4A3B2C" title="Dark Walnut"></div>
+          <div class="palette-swatch" style="background:#E8D5C0" title="Blush Peach"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #2C1F12 0%, #8C7B6B 50%, #F5E6D0 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Timeless<br>Scandi<br>Chic</div>
+        <div class="vblock-sub">unretouched · sustainable · authentic</div>
+      </div>
+      <a href="https://djerfavenue.com" target="_blank" class="visual-link">djerfavenue.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>보정 없는 사진 원칙 → "웹사이트에서 보는 것이 실제 받는 것"</li>
+          <li>시즌리스 타임리스 디자인 → 트렌드 소비 패턴 저항</li>
+          <li>창업자의 일상 콘텐츠가 브랜드 세계관 그 자체</li>
+          <li>2024년 위기: 창업자 의존도 과잉의 취약성 노출</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>따뜻한 중성 톤 — 편안하고 고급스러운 일상</li>
+          <li>자연광 중심 photography — 과도한 스튜디오 연출 없음</li>
+          <li>스칸디나비안 미니멀리즘 + 인간적 온기의 결합</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>창업자의 진솔한 일상 공유 → 팔로워가 '친구'가 됨</li>
+          <li>지속가능성·공정 생산을 조용하게 실천</li>
+          <li>교훈: 창업자 리스크 관리 필요 — 브랜드는 개인을 초월해야 함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Djerf Avenue의 성공(진정성·비보정)과 위기(창업자 의존도)에서 이퀄베리는 중요한 균형을 배웁니다. <strong>창업자 또는 과학자 스토리를 브랜드 자산으로 활용하되, 브랜드 철학과 커뮤니티가 개인을 넘어설 수 있는 구조를 동시에 설계해야 합니다.</strong> 또한 "보정 없는 피부"라는 비주얼 원칙은 이퀄베리의 "완벽하지 않은 공간에서 빛나는 피부" 방향과 정확히 일치합니다.</p>
+  </div>
+</div>
+
+<!-- 11. MUSEUM OF ICE CREAM -->
+<div id="moic" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">11 / 16</div>
+        <div class="brand-name">Museum of Ice Cream</div>
+        <div class="brand-category">Experience · USA</div>
+      </div>
+      <div class="brand-tagline">제품이 아닌 '경험'을 팔아 — 소비자가 직접 광고가 되다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Instagram 최적화된 몰입형 공간. "함께하는 인간적 연결"이 미션. 브랜드 경험이 사용자 생성 콘텐츠(UGC)를 자동 생산하는 구조 창안.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FF69B4" title="Hot Pink"></div>
+          <div class="palette-swatch" style="background:#FFD700" title="Yellow"></div>
+          <div class="palette-swatch" style="background:#98FB98" title="Mint"></div>
+          <div class="palette-swatch" style="background:#FF6347" title="Tomato"></div>
+          <div class="palette-swatch" style="background:#87CEEB" title="Sky Blue"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #FF1493 0%, #FF69B4 40%, #FFD700 100%);">
+      <div class="vblock">
+        <div class="vblock-text">Imagine<br>Together</div>
+        <div class="vblock-sub">multi-sensory · shareable · experiential</div>
+      </div>
+      <a href="https://www.museumoficecream.com" target="_blank" class="visual-link">museumoficecream.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>경험 자체가 목적 — 제품·역사 교육 없이 '함께하는 기쁨' 판매</li>
+          <li>Instagram 최적화된 공간 설계 → 방문자가 자발적 홍보대사</li>
+          <li>다감각(시각·촉각·미각) 동시 활성화로 기억에 남는 경험 구축</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>스프링클·바나나 등 아이코닉 모티프 — 즉각적 인식 가능한 기호</li>
+          <li>강렬한 배경색 + 단순한 형태 → 사진에서 강하게 읽힘</li>
+          <li>굿즈가 경험을 일상으로 연장 — 머천다이즈가 미디어</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>직원이 '브랜드 체현자' — 유니폼·태도·활기가 브랜드의 일부</li>
+          <li>지역 파트너십 → 커뮤니티 통합 + 로컬 신뢰</li>
+          <li>경험 후 소비자 콘텐츠 창출 → 광고비 절감</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">이퀄베리가 팝업 스토어, 캠페인 공간, 브랜드 이벤트를 설계할 때의 레퍼런스. <strong>공간이 Instagram에서 공유될 것을 전제로 설계되어야 합니다.</strong> 또한 MoIC가 '아이스크림'이라는 단순한 오브제를 경험으로 확장한 것처럼, 이퀄베리의 성분(블루 스피루리나, 레티날 등)이 오브제로서 공간·비주얼·경험으로 확장될 가능성을 탐색할 수 있습니다.</p>
+  </div>
+</div>
+
+<!-- 12. ACNE STUDIOS -->
+<div id="acne" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">12 / 16</div>
+        <div class="brand-name">Acne Studios</div>
+        <div class="brand-category">Luxury Fashion · Sweden</div>
+      </div>
+      <div class="brand-tagline">"Maximalist Minimalism" — 선택하지 않을 것을 선택하는 철학</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">Jonny Johansson 창업. 스웨덴 미니멀리즘 + 예술적 실험. "Face" 엠블럼 — 행복하지도 슬프지도 않은 이모티콘. 전통 광고·셀럽 협업 최소화.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#E8E0D5" title="Stone"></div>
+          <div class="palette-swatch" style="background:#C8C0B5" title="Light Beige"></div>
+          <div class="palette-swatch" style="background:#A0A0A0" title="Medium Gray"></div>
+          <div class="palette-swatch" style="background:#3A3A4A" title="Dark Slate"></div>
+          <div class="palette-swatch" style="background:#0044CC" title="Cobalt Blue (accent)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: linear-gradient(135deg, #1A1A2E 0%, #3A3A4A 50%, #6A6A7A 100%);">
+      <div class="vblock">
+        <div class="vblock-text">🙂</div>
+        <div class="vblock-text" style="font-size:28px">Maximalist<br>Minimalism</div>
+        <div class="vblock-sub">swedish restraint · substance · longevity</div>
+      </div>
+      <a href="https://www.acnestudios.com" target="_blank" class="visual-link">acnestudios.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>"가질 것이 아닌, 갖지 않을 것을 선택한다" — 감산(減算)의 미학</li>
+          <li>셀럽 없는 브랜드 → 구전과 시각적 일관성으로 신뢰 구축</li>
+          <li>럭셔리 = 지위가 아닌 '물질과 스타일의 지속성'으로 재정의</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>뮤트 톤(베이지·그레이·크림) + 코발트 블루 포인트</li>
+          <li>"Face" 엠블럼 — 표정 없음 = 스웨덴식 감정 절제</li>
+          <li>실험적 아트 디렉션 → 패션이 아닌 예술에 가까운 이미지</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>자체 광고만 제작 → 브랜드 보이스 100% 통제</li>
+          <li>논란·트렌드를 쫓지 않음 → 철학적 확고함이 신뢰를 만듦</li>
+          <li>지속가능성을 선언하지 않고 실천 — 조용한 진정성</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">Acne Studios의 "Maximalist Minimalism" 철학은 이퀄베리의 포지셔닝과 깊이 공명합니다. <strong>이퀄베리도 "정확히 필요한 것만 전달한다"는 철학을 비주얼·패키징·커뮤니케이션 전반에 감산의 방식으로 구현해야 합니다.</strong> 군더더기 없는 성분, 군더더기 없는 패키징, 군더더기 없는 카피. 또한 자체 광고 통제와 셀럽 회피 전략은 이퀄베리의 '임상 검증'이라는 신뢰 구축과 병행할 수 있습니다.</p>
+  </div>
+</div>
+
+<!-- 13. A24 -->
+<div id="a24" class="brand-card">
+  <div class="brand-header">
+    <div class="brand-info">
+      <div>
+        <div class="brand-num">13 / 16</div>
+        <div class="brand-name">A24</div>
+        <div class="brand-category">Film Studio · USA</div>
+      </div>
+      <div class="brand-tagline">"If You Know, You Know" — 로고가 품질의 보증이 되고 팬덤이 컬트가 되다</div>
+      <div>
+        <p style="font-size:13px;color:#666;line-height:1.7">인디 배급사 → 문화적 아이콘. 마케팅 비용의 95%를 온라인에 집중. AAA24 멤버십: 분기별 진, 생일 선물, 한정판 굿즈. 로고 자체가 문신의 모티프가 될 정도의 팬덤.</p>
+        <div class="palette" style="margin-top:12px">
+          <div class="palette-swatch" style="background:#FFFFFF" title="White"></div>
+          <div class="palette-swatch" style="background:#E8E0D5" title="Off White"></div>
+          <div class="palette-swatch" style="background:#2A2A2A" title="Near Black"></div>
+          <div class="palette-swatch" style="background:#8B0000" title="Deep Red (film)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="brand-visual" style="background: #0A0A0A;">
+      <div class="vblock">
+        <div class="vblock-text" style="letter-spacing:-2px;font-size:90px">A24</div>
+        <div class="vblock-sub" style="color:rgba(255,255,255,0.4)">curation · discovery · if you know you know</div>
+      </div>
+      <a href="https://a24films.com" target="_blank" class="visual-link">a24films.com ↗</a>
+    </div>
+  </div>
+
+  <div class="brand-body">
+    <div class="brand-block">
+      <div class="block-label">핵심 전략</div>
+      <div class="block-content">
+        <ul>
+          <li>큐레이션이 곧 브랜드 — "A24 영화"라는 인식이 장르가 됨</li>
+          <li>IYKYK(If You Know, You Know) 문화 → 소속감·발견의 쾌락 자극</li>
+          <li>마케팅 비용의 95%를 온라인에 → 알고리즘과 커뮤니티가 배포자</li>
+          <li>AAA24 멤버십으로 팬을 '문화 공동체' 구성원으로 격상</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">비주얼 아이덴티티</div>
+      <div class="block-content">
+        <ul>
+          <li>미드센추리 헐리우드를 현대적으로 재해석한 로고</li>
+          <li>영화별로 완전히 다른 비주얼 — 통일성이 '큐레이터'의 안목</li>
+          <li>한정판 굿즈 · 진(Zine) → 팬덤을 수집가로 만드는 물리적 접점</li>
+        </ul>
+      </div>
+    </div>
+    <div class="brand-block">
+      <div class="block-label">커뮤니케이션 방식</div>
+      <div class="block-content">
+        <ul>
+          <li>브랜드 자체가 '발견'의 언어로 말함 → 소비자가 발견자가 된 느낌</li>
+          <li>영화 팬보다 '예술 팬'에게 어필 → 더 헌신적인 커뮤니티</li>
+          <li>SNS 톤: 영화 덕후 친구의 게시물처럼 — 자기 인식적·유머·진정성</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-label">↳ EQQUALBERRY 적용 포인트</div>
+    <p class="insight-text">A24의 가장 강력한 전략은 <strong>브랜드를 '큐레이터'로 포지셔닝하는 것</strong>입니다. 이퀄베리가 스킨케어 성분 중 "진짜 효과 있는 것들"을 선별·검증하는 큐레이터 역할을 자임한다면, 소비자는 이퀄베리를 신뢰하는 것이 아니라 '발견'하는 경험을 하게 됩니다. 또한 A24의 멤버십·굿즈·진(Zine) 생태계는 이퀄베리의 과학 콘텐츠와 성분 교육을 물리적 수집물로 만드는 아이디어로 연결됩니다.</p>
+  </div>
+</div>
+
+</div><!-- /brand-section -->
+
+<!-- ===================== -->
+<!-- SYNTHESIS -->
+<!-- ===================== -->
+<div id="synthesis" class="synthesis">
+  <div class="synthesis-label">종합 인사이트 · EQQUALBERRY 리브랜딩 방향</div>
+  <h2 class="synthesis-title">13개 브랜드가 가리키는<br>이퀄베리의 방향</h2>
+
+  <div class="synthesis-grid">
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">01</div>
+      <div class="synthesis-item-title">하나의 감각적 이미지어를 만들어라</div>
+      <p class="synthesis-item-body">Rhode의 "Glazed Donut Skin"처럼, 이퀄베리의 브랜드 철학("피부 자생력", "일상의 충전")을 소비자가 즉시 시각화할 수 있는 감각적 언어 하나로 압축해야 합니다. 이 이미지어가 콘텐츠·패키징·카피의 핵심 레퍼런스가 됩니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">Rhode</span>
+        <span class="brand-pill">Vacation</span>
+        <span class="brand-pill">Futurewise</span>
+      </div>
+    </div>
+
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">02</div>
+      <div class="synthesis-item-title">"질문"을 참여 구조로 만들어라</div>
+      <p class="synthesis-item-body">Glossier가 블로그 독자에게 "드림 페이스워시"를 물은 것처럼, Kiki World가 소비자 투표를 제품화한 것처럼 — 이퀄베리의 "Question" DNA는 소비자 참여 메커니즘으로 반드시 실체화되어야 합니다. "당신의 피부 질문에 우리가 답합니다"가 선언이 아닌 실제 프로세스가 되어야 합니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">Glossier</span>
+        <span class="brand-pill">Kiki World</span>
+        <span class="brand-pill">Eadem</span>
+      </div>
+    </div>
+
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">03</div>
+      <div class="synthesis-item-title">감산의 미학 — 덜어냄으로 강해지는 비주얼</div>
+      <p class="synthesis-item-body">Acne Studios·Crown Affair가 보여주듯 "정확히 필요한 것만" 철학은 비주얼에도 그대로 적용되어야 합니다. 뮤트 팔레트, 여백, 자연광, 성분 오브제 — 과잉 연출을 걷어낸 자리에서 피부 자체가 주인공이 됩니다. 현재의 컬러풀·팝 이미지에서 절제된 과학적 품위로의 전환이 리브랜딩의 핵심입니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">Acne Studios</span>
+        <span class="brand-pill">Crown Affair</span>
+        <span class="brand-pill">Djerf Avenue</span>
+      </div>
+    </div>
+
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">04</div>
+      <div class="synthesis-item-title">카테고리의 관습에 이의를 제기하라</div>
+      <p class="synthesis-item-body">Oatly가 "우유보다 오틀리가 더 나은 이유"를 전략 코어로 삼은 것처럼, 이퀄베리는 스킨케어 카테고리의 당연한 것들에 직접 질문해야 합니다. "왜 안티에이징이라는 말이 두려움을 팔아야만 하는가?" "왜 성분은 복잡해야 하는가?" 이 반문이 이퀄베리의 카피·캠페인의 출발점이 될 수 있습니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">Oatly</span>
+        <span class="brand-pill">MSCHF</span>
+        <span class="brand-pill">Eadem</span>
+      </div>
+    </div>
+
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">05</div>
+      <div class="synthesis-item-title">브랜드를 큐레이터로 포지셔닝하라</div>
+      <p class="synthesis-item-body">A24가 영화 배급사를 넘어 '안목 있는 큐레이터'가 된 것처럼, 이퀄베리는 수천 개의 성분 중 "진짜 효과 있는 것만" 선별·검증하는 큐레이터가 될 수 있습니다. "Good question. Our formula shows up for you." — 소비자의 질문을 받아 과학적으로 답하는 과정이 곧 브랜드 스토리입니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">A24</span>
+        <span class="brand-pill">Crown Affair</span>
+        <span class="brand-pill">Acne Studios</span>
+      </div>
+    </div>
+
+    <div class="synthesis-item">
+      <div class="synthesis-item-num">06</div>
+      <div class="synthesis-item-title">경험을 UGC 생산 구조로 설계하라</div>
+      <p class="synthesis-item-body">Museum of Ice Cream이 공간을 Instagram 콘텐츠 생산 기계로 만든 것처럼, 이퀄베리의 모든 소비자 접점(팝업·패키징·SNS)을 "공유하고 싶어지는" 경험으로 설계해야 합니다. 성분이 오브제로, 루틴이 의식(ritual)으로, 결과가 이야기로 — 소비자가 브랜드의 가장 강력한 미디어입니다.</p>
+      <div class="synthesis-item-brands">
+        <span class="brand-pill">Museum of Ice Cream</span>
+        <span class="brand-pill">Rhode</span>
+        <span class="brand-pill">Glossier</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY TABLE -->
+<div class="apply-table">
+  <h3>이퀄베리 리브랜딩 적용 매트릭스</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>적용 영역</th>
+        <th>현재 과제</th>
+        <th>참고 브랜드</th>
+        <th>제안 방향</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>브랜드 언어</td>
+        <td class="from">기능·성분 중심 언어 → 소비자 감각 언어 부재</td>
+        <td class="from">Rhode · Vacation · Futurewise</td>
+        <td>하나의 감각적 이미지어 개발 ("피부 충전" 같은 즉각적 시각화 언어)</td>
+      </tr>
+      <tr>
+        <td>비주얼 팔레트</td>
+        <td class="from">컬러풀·팝 → 세럼 중심 과학 브랜드와 미스매치</td>
+        <td class="from">Acne Studios · Crown Affair · Djerf Avenue</td>
+        <td>뮤트·웜 뉴트럴 팔레트로 전환, 성분 오브제를 비주얼 주인공으로</td>
+      </tr>
+      <tr>
+        <td>소비자 참여</td>
+        <td class="from">"Question" DNA의 실체화 부재</td>
+        <td class="from">Glossier · Kiki World · Eadem</td>
+        <td>소비자 질문 수집 → 성분 개발 스토리 공개 → 제품 출시를 '답변'으로 연출</td>
+      </tr>
+      <tr>
+        <td>콘텐츠 전략</td>
+        <td class="from">단일 제품(비타세럼) 인지도 → 브랜드 전체로 확장 필요</td>
+        <td class="from">A24 · Oatly · MSCHF</td>
+        <td>"한 문장으로 이해되는 콘텐츠" 원칙, 카테고리 관습에 이의 제기하는 시리즈</td>
+      </tr>
+      <tr>
+        <td>커뮤니티 빌딩</td>
+        <td class="from">구매자 커뮤니티 → 브랜드 팬덤으로 진화 미흡</td>
+        <td class="from">A24 · Glossier · Kiki World</td>
+        <td>이퀄베리 멤버십·뉴스레터·콘텐츠 생태계, IYKYK 수준의 팬덤 기반 구축</td>
+      </tr>
+      <tr>
+        <td>브랜드 경험</td>
+        <td class="from">온라인 판매 중심 → 물리적 브랜드 경험 부재</td>
+        <td class="from">Museum of Ice Cream · Rhode (Sephora)</td>
+        <td>성분 오브제 팝업, Instagram 최적화된 공간 설계, 체험이 UGC 생산</td>
+      </tr>
+      <tr>
+        <td>패키징</td>
+        <td class="from">세럼 중심 철학과 패키징 비주얼의 연결성 강화 필요</td>
+        <td class="from">Oatly · Crown Affair · Acne Studios</td>
+        <td>패키징을 '선언문'으로 — 브랜드 철학이 박스를 열기 전부터 전달되도록</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>EQQUALBERRY INTERNAL RESEARCH · 2026.06</span>
+  <span>13 BRANDS · BEAUTY / FASHION / FOOD / ENTERTAINMENT</span>
+</footer>
+
+</body>
+</html>
