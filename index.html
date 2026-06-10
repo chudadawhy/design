@@ -146,3 +146,238 @@
     }
 
     .card-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #d0d0e8;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #8888a8;
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #8888a8;
+      font-size: 14px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #2a2a3e;
+      border-top-color: #5b5bf0;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      padding: 60px;
+      color: #8888a8;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+      padding: 16px 48px;
+      border-bottom: 1px solid #1e1e2e;
+      font-size: 12px;
+      color: #8888a8;
+    }
+
+    .stat span { color: #8888cc; font-weight: 600; }
+
+    /* 카테고리별 색상 */
+    .cat-trend { background: #1a2a1a; color: #4ade80; }
+    .cat-instagram { background: #2a1a2a; color: #e879f9; }
+    .cat-benchmark { background: #1a1e2a; color: #60a5fa; }
+    .cat-other { background: #2a1e1a; color: #fb923c; }
+    .tag-trend { background: #1a2a1a; color: #4ade80; }
+    .tag-instagram { background: #2a1a2a; color: #e879f9; }
+    .tag-benchmark { background: #1a1e2a; color: #60a5fa; }
+    .tag-other { background: #2a1e1a; color: #fb923c; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>✦ Design Hub</h1>
+  <p>chudadawhy/design — 파일을 추가하면 자동으로 반영됩니다</p>
+</header>
+
+<div class="stats" id="stats">
+  <div>전체 <span id="total-count">—</span>개</div>
+  <div>마지막 업데이트 <span id="last-updated">—</span></div>
+</div>
+
+<div class="toolbar">
+  <input class="search-box" type="text" placeholder="파일 이름 검색..." id="search" />
+  <div class="filter-btns">
+    <button class="filter-btn active" data-filter="all">전체</button>
+    <button class="filter-btn" data-filter="trend">트렌드</button>
+    <button class="filter-btn" data-filter="instagram">인스타그램</button>
+    <button class="filter-btn" data-filter="benchmark">벤치마킹</button>
+    <button class="filter-btn" data-filter="other">기타</button>
+  </div>
+  <button class="refresh-btn" onclick="loadFiles()">↻ 새로고침</button>
+</div>
+
+<div class="main" id="main">
+  <div class="loading">
+    <div class="spinner"></div><br>파일 목록 불러오는 중...
+  </div>
+</div>
+
+<script>
+  const OWNER = 'chudadawhy';
+  const REPO = 'design';
+  const BRANCH = 'main'; // main 또는 master
+
+  let allFiles = [];
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  const categoryConfig = {
+    trend:     { icon: '📊', keywords: ['trend', '트렌드'], color: 'cat-trend', tag: 'tag-trend', label: '트렌드' },
+    instagram: { icon: '📱', keywords: ['instagram', 'insta', '인스타', 'calendar', 'plan'], color: 'cat-instagram', tag: 'tag-instagram', label: '인스타그램' },
+    benchmark: { icon: '🔍', keywords: ['benchmark', '벤치', 'brand', 'competitor'], color: 'cat-benchmark', tag: 'tag-benchmark', label: '벤치마킹' },
+    other:     { icon: '📄', keywords: [], color: 'cat-other', tag: 'tag-other', label: '기타' },
+  };
+
+  function detectCategory(filename) {
+    const lower = filename.toLowerCase();
+    for (const [key, cfg] of Object.entries(categoryConfig)) {
+      if (key === 'other') continue;
+      if (cfg.keywords.some(k => lower.includes(k))) return key;
+    }
+    return 'other';
+  }
+
+  async function loadFiles() {
+    document.getElementById('main').innerHTML = `
+      <div class="loading"><div class="spinner"></div><br>파일 목록 불러오는 중...</div>`;
+
+    try {
+      // 재귀적으로 모든 HTML 파일 가져오기
+      const files = await fetchAllFiles('');
+      allFiles = files.filter(f => f.name.endsWith('.html') && f.name !== 'index.html');
+
+      document.getElementById('total-count').textContent = allFiles.length;
+      document.getElementById('last-updated').textContent = new Date().toLocaleString('ko-KR');
+
+      renderFiles();
+    } catch (e) {
+      document.getElementById('main').innerHTML = `
+        <div class="empty">
+          ⚠️ 파일을 불러올 수 없습니다.<br>
+          <small style="font-size:11px;margin-top:8px;display:block;">저장소가 Public인지 확인해 주세요.</small>
+        </div>`;
+    }
+  }
+
+  async function fetchAllFiles(path) {
+    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
+    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+    if (!res.ok) throw new Error('API error');
+    const items = await res.json();
+
+    let files = [];
+    for (const item of items) {
+      if (item.type === 'file' && item.name.endsWith('.html')) {
+        files.push({ ...item, category: detectCategory(item.name) });
+      } else if (item.type === 'dir') {
+        const sub = await fetchAllFiles(item.path);
+        files = files.concat(sub);
+      }
+    }
+    return files;
+  }
+
+  function renderFiles() {
+    const filtered = allFiles.filter(f => {
+      const matchFilter = activeFilter === 'all' || f.category === activeFilter;
+      const matchSearch = f.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      document.getElementById('main').innerHTML = `<div class="empty">조건에 맞는 파일이 없습니다.</div>`;
+      return;
+    }
+
+    // 카테고리별 그룹
+    const groups = {};
+    filtered.forEach(f => {
+      if (!groups[f.category]) groups[f.category] = [];
+      groups[f.category].push(f);
+    });
+
+    let html = '';
+    const order = activeFilter === 'all'
+      ? ['trend', 'instagram', 'benchmark', 'other']
+      : [activeFilter];
+
+    order.forEach(cat => {
+      if (!groups[cat] || groups[cat].length === 0) return;
+      const cfg = categoryConfig[cat];
+      html += `<div class="section-title">${cfg.label}</div><div class="grid">`;
+      groups[cat].forEach(f => {
+        const pageUrl = `https://${OWNER}.github.io/${REPO}/${f.path}`;
+        const displayName = f.name.replace('.html', '').replace(/[-_]/g, ' ');
+        const folder = f.path.includes('/') ? f.path.split('/').slice(0, -1).join('/') : '';
+        html += `
+          <a class="card" href="${pageUrl}" target="_blank">
+            <div class="card-icon ${cfg.color}">${cfg.icon}</div>
+            <div class="card-name">${displayName}</div>
+            <div class="card-meta">${folder || '루트'}</div>
+            <span class="card-tag ${cfg.tag}">${cfg.label}</span>
+          </a>`;
+      });
+      html += '</div>';
+    });
+
+    document.getElementById('main').innerHTML = html;
+  }
+
+  // 검색
+  document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    renderFiles();
+  });
+
+  // 필터
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderFiles();
+    });
+  });
+
+  loadFiles();
+</script>
+
+</body>
+</html>
