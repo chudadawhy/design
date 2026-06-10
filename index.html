@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 SNS Trends Guide | SNS 트렌드 완전 정복</title>
+    <meta name="description" content="2026년 최신 Facebook, Instagram, YouTube, Threads, X(트위터) 트렌드와 초보자 운영 팁을 한눈에! 실시간 뉴스 수집 기능 포함.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Dynamic Background Blobs -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="badge">📊 TREND REPORT 2026</div>
+        <h1>2026 SNS Platforms Guide</h1>
+        <p>AI 알고리즘의 고도화, 숏폼의 부상, 크리에이터 수익화의 정착.<br>
+           5대 소셜 미디어 플랫폼의 핵심 트렌드와 안착 전략을 한눈에 파악하세요.</p>
+
+        <!-- 날짜 + 트렌드 수집 버튼 -->
+        <div class="hero-actions">
+            <div class="date-display">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="today-date">로딩 중...</span>
+            </div>
+            <div class="api-key-row">
+                <input type="text" id="api-key-input" placeholder="GNews API 키 입력 (gnews.io 무료 발급)" />
+                <button id="fetch-btn" class="fetch-btn" onclick="fetchTrends()">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span>트렌드 수집</span>
+                </button>
+            </div>
+            <p class="api-hint">
+                🔑 API 키 없이도 기본 가이드를 볼 수 있습니다. 
+                <a href="https://gnews.io/" target="_blank" rel="noopener">gnews.io에서 무료 발급 →</a>
+            </p>
+        </div>
+
+        <!-- 상태 메시지 -->
+        <div id="status-bar" class="status-bar hidden"></div>
+    </header>
+
+    <!-- QUICK NAV -->
+    <nav class="quick-nav" aria-label="플랫폼 빠른 이동">
+        <a href="#facebook" class="nav-pill" data-sns="facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
+        <a href="#instagram" class="nav-pill" data-sns="instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="#youtube" class="nav-pill" data-sns="youtube"><i class="fa-brands fa-youtube"></i> YouTube</a>
+        <a href="#threads" class="nav-pill" data-sns="threads"><i class="fa-brands fa-threads"></i> Threads</a>
+        <a href="#x" class="nav-pill" data-sns="x"><i class="fa-brands fa-x-twitter"></i> X</a>
+    </nav>
+
+    <main class="container">
+
+        <!-- ===== 1. FACEBOOK ===== -->
+        <article class="sns-card" id="facebook" data-sns="facebook">
+            <header class="card-header">
+                <i class="fa-brands fa-facebook card-icon"></i>
+                <div>
+                    <h2>Facebook</h2>
+                    <span class="card-subtitle">커뮤니티 & 광고 마케팅의 허브</span>
+                </div>
+            </header>
+            <div class="card-body">
+                <section class="info-section feature-highlight">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 차별화 특징</h3>
+                    <p>타겟 맞춤형 마케팅과 강력한 커뮤니티(그룹)의 중심지. 단순 네트워킹을 넘어 <strong>실명 기반 커뮤니티 허브</strong>로 진화. 세계 최정교한 데이터 기반 광고 생태계를 자랑합니다.</p>
+                </section>
+
+                <section class="info-section">
+                    <h3><i class="fa-solid fa-layer-group"></i> 5대 핵심 기능</h3>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-num">01</span>
+                            <div><strong>그룹 (Groups)</strong> 공통 관심사를 가진 유저들의 강력한 커뮤니티 공간. 일반 페이지보다 훨씬 높은 도달률과 깊은 참여도를 보여줍니다.</div>
+                        </li>
+                        <li>
+                            <span class="feature-num">02</span>
+                            <div><strong>페이지 (Pages)</strong> 브랜드·인플루언서가 개인 프로필과 분리하여 팬들과 공식 소통하는 비즈니스 채널. 심층 인사이트 통계를 제공합니다.</div>
+                        </li>
+                        <li>
+                            <span class="feature-num">03</span>
+                            <div><strong>타겟티드 광고 (Ads)</strong> 방대한 사용자 데이터 기반 세계 최고 수준의 정교한 타겟팅. 소액 예산으로도 정확한 잠재 고객에게 도달합니다.</div>
+                        </li>
+                        <li>
+                            <span class="feature-num">04</span>
+                            <div><strong>릴스 (Reels)</strong> 인스타그램 릴스와 교차 노출 가능한 숏폼 동영상. 알고리즘 혜택으로 바이럴 확산과 신규 유저 도달에 필수입니다.</div>
+                        </li>
+                        <li>
+                            <span class="feature-num">05</span>
+                            <div><strong>마켓플레이스</strong> 실명 기반 신뢰를 바탕으로 지역 중고 거래 및 소상공인 홍보 플랫폼. 안정적인 지역 경제 생태계로 정착했습니다.</div>
+                        </li>
+                    </ul>
+                </section>
+
+                <div class="two-columns">
+                    <section class="info-section target-users">
+                        <h3><i class="fa-solid fa-users"></i> 타깃 유저</h3>
+                        <p class="highlight-text">30대 후반 ~ 60대 이상</p>
+                        <p class="sub-text">동창·지인 네트워킹, 지역 커뮤니티 활동, 뉴스 및 시사 정보 소비</p>
+                    </section>
+                    <section class="info-section operation-tips">
+                        <h3><i class="fa-solid fa-rocket"></i> 초보자 운영 팁</h3>
+                        <ol class="tips-list">
+                            <li>관심사와 맞는 활성 <strong>'그룹'에 가입</strong>해 진정성 있는 소통으로 초기 인지도 구축.</li>
+                            <li>릴스나 카드뉴스에 <strong>정보성 텍스트를 결합</strong>해 '공유'를 유도.</li>
+                            <li>월 3~5만 원의 <strong>소액 타겟 광고</strong>로 핵심 잠재 고객을 빠르게 확보.</li>
+                        </ol>
+                    </section>
+                </div>
+
+                <!-- 실시간 트렌드 뉴스 영역 -->
+                <section class="info-section trend-news-section hidden" id="trends-facebook">
+                    <h3><i class="fa-solid fa-newspaper"></i> 최신 트렌드 뉴스 <span class="update-time" id="time-facebook"></span></h3>
+                    <ul class="news-list" id="news-facebook"></ul>
+                </section>
+            </div>
+        </article>
+
+        <!-- ===== 2. INSTAGRAM ===== -->
+        <article class="sns-card" id="instagram" data-sns="instagram">
+            <header class="card-header">
+                <div class="insta-icon-wrapper"><i class="fa-brands fa-instagram card-icon"></i></div>
+                <div>
+                    <h2>Instagram</h2>
+                    <span class="card-subtitle">비주얼 트렌드 & 숏폼 바이럴의 끝판왕</span>
+                </div>
+            </header>
+            <div class="card-body">
+                <section class="info-section feature-highlight">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 차별화 특징</h3>
+                    <p>세련된 사진과 영상으로 감각적 스토리텔링을 펼치는 플랫폼. AI 알고리즘 기반 <strong>릴스 추천이 메인</strong>으로 자리 잡으며 브랜드와 개인의 폭발적 성장을 이끄는 비주얼 쇼윈도가 됐습니다.</p>
+                </section>
+
+                <section class="info-section">
+                    <h3><i class="fa-solid fa-layer-group"></i> 5대 핵심 기능</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-num">01</span><div><strong>릴스 (Reels)</strong> 팔로우 여부와 무관하게 관심사 AI 기반으로 탐색 탭에 무한 추천. 신규 팔로워를 가장 많이 유입시키는 성장 동력입니다.</div></li>
+                        <li><span class="feature-num">02</span><div><strong>피드 (Feed / Grid)</strong> 브랜드·개인의 시각적 정체성을 보여주는 프로필 갤러리. 일관된 톤앤매너로 신규 방문자의 '팔로우' 클릭을 유도합니다.</div></li>
+                        <li><span class="feature-num">03</span><div><strong>스토리 (Stories)</strong> 24시간 자동 소멸 기능. 투표·Q&A·링크 스티커로 팔로워들과 정서적 인터랙션을 매일 이어갑니다.</div></li>
+                        <li><span class="feature-num">04</span><div><strong>탐색 탭 (Explore)</strong> AI가 시청 패턴을 분석해 맞춤 게시물을 끝없이 추천. 트렌디한 콘텐츠 하나로 폭발적인 신규 노출을 얻습니다.</div></li>
+                        <li><span class="feature-num">05</span><div><strong>다이렉트 메시지 (DM)</strong> 챗봇 자동화와 결합해 CS처리·이벤트 접수·협업 제안 등 비즈니스 도구로 격상됐습니다.</div></li>
+                    </ul>
+                </section>
+
+                <div class="two-columns">
+                    <section class="info-section target-users">
+                        <h3><i class="fa-solid fa-users"></i> 타깃 유저</h3>
+                        <p class="highlight-text">10대 후반 ~ 30대 MZ세대</p>
+                        <p class="sub-text">패션, 뷰티, 카페, 여행 등 감각적 라이프스타일 트렌드에 민감한 비주얼 지향층</p>
+                    </section>
+                    <section class="info-section operation-tips">
+                        <h3><i class="fa-solid fa-rocket"></i> 초보자 운영 팁</h3>
+                        <ol class="tips-list">
+                            <li>최신 유행 음원 활용한 <strong>'릴스 제작'</strong>에 초기 역량 80% 투자.</li>
+                            <li><strong>피드(쇼윈도)와 스토리(일상 소통)</strong>를 철저히 분리해 운영.</li>
+                            <li>핏 맞는 <strong>핵심 해시태그 5~10개</strong>를 매 게시물에 배치.</li>
+                        </ol>
+                    </section>
+                </div>
+
+                <section class="info-section trend-news-section hidden" id="trends-instagram">
+                    <h3><i class="fa-solid fa-newspaper"></i> 최신 트렌드 뉴스 <span class="update-time" id="time-instagram"></span></h3>
+                    <ul class="news-list" id="news-instagram"></ul>
+                </section>
+            </div>
+        </article>
+
+        <!-- ===== 3. YOUTUBE ===== -->
+        <article class="sns-card" id="youtube" data-sns="youtube">
+            <header class="card-header">
+                <i class="fa-brands fa-youtube card-icon"></i>
+                <div>
+                    <h2>YouTube</h2>
+                    <span class="card-subtitle">세계 최대 동영상 검색 엔진 & 아카이브</span>
+                </div>
+            </header>
+            <div class="card-body">
+                <section class="info-section feature-highlight">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 차별화 특징</h3>
+                    <p>쇼츠(숏폼)와 롱폼이 유기적으로 결합된 모든 영상 포맷의 종착지. <strong>'검색'을 통한 장기 조회수 누적</strong>과 <strong>'알고리즘 추천'을 통한 무한 체류</strong>를 동시에 보장합니다.</p>
+                </section>
+
+                <section class="info-section">
+                    <h3><i class="fa-solid fa-layer-group"></i> 5대 핵심 기능</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-num">01</span><div><strong>쇼츠 (Shorts)</strong> 강렬한 템포의 60초 이내 세로형 비디오. 알고리즘 파급력이 폭발적이라 초기 채널 인지도와 신규 구독자 확보의 핵심 발판입니다.</div></li>
+                        <li><span class="feature-num">02</span><div><strong>롱폼 비디오</strong> SEO 최적화로 수년 후에도 안정적인 조회수를 창출. 채널 수익의 핵심 캐시카우 역할을 합니다.</div></li>
+                        <li><span class="feature-num">03</span><div><strong>홈 추천 알고리즘</strong> 클릭률·시청 지속 시간·이탈률을 분석해 맞춤 영상을 메인 홈에 자동 추천합니다.</div></li>
+                        <li><span class="feature-num">04</span><div><strong>유튜브 라이브</strong> 실시간 방송 및 슈퍼챗 후원으로 크리에이터와 코어 팬덤을 강력 결속시키는 기능입니다.</div></li>
+                        <li><span class="feature-num">05</span><div><strong>커뮤니티 탭</strong> 영상 없이도 사진·텍스트·설문으로 구독자와 소통. 휴식기에도 채널 존재감을 알리는 브릿지 기능입니다.</div></li>
+                    </ul>
+                </section>
+
+                <div class="two-columns">
+                    <section class="info-section target-users">
+                        <h3><i class="fa-solid fa-users"></i> 타깃 유저</h3>
+                        <p class="highlight-text">전 연령층 (알파세대 ~ 시니어)</p>
+                        <p class="sub-text">목적성 튜토리얼·정보 검색, 킬링타임 엔터테인먼트 시청자까지 전방위 커버</p>
+                    </section>
+                    <section class="info-section operation-tips">
+                        <h3><i class="fa-solid fa-rocket"></i> 초보자 운영 팁</h3>
+                        <ol class="tips-list">
+                            <li>편집 부담이 낮은 <strong>'쇼츠'</strong>로 먼저 구독자를 모으고 롱폼으로 확장.</li>
+                            <li>클릭을 유도하는 <strong>직관적 썸네일과 제목</strong>에 가장 많은 시간 투자.</li>
+                            <li>영상 <strong>초반 5~10초에 Hook(하이라이트)</strong>을 배치해 이탈 방지.</li>
+                        </ol>
+                    </section>
+                </div>
+
+                <section class="info-section trend-news-section hidden" id="trends-youtube">
+                    <h3><i class="fa-solid fa-newspaper"></i> 최신 트렌드 뉴스 <span class="update-time" id="time-youtube"></span></h3>
+                    <ul class="news-list" id="news-youtube"></ul>
+                </section>
+            </div>
+        </article>
+
+        <!-- ===== 4. THREADS ===== -->
+        <article class="sns-card" id="threads" data-sns="threads">
+            <header class="card-header">
+                <i class="fa-brands fa-threads card-icon"></i>
+                <div>
+                    <h2>Threads</h2>
+                    <span class="card-subtitle">실시간 텍스트 마이크로블로그</span>
+                </div>
+            </header>
+            <div class="card-body">
+                <section class="info-section feature-highlight">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 차별화 특징</h3>
+                    <p>이미지 없이 머릿속 생각을 툭 던지는 <strong>솔직한 텍스트 대화 공론장</strong>. 인스타그램과 형제 관계로 팔로워 이전이 쉬우며, '진지함'보다 '솔직함과 재치'가 알고리즘을 타는 곳입니다.</p>
+                </section>
+
+                <section class="info-section">
+                    <h3><i class="fa-solid fa-layer-group"></i> 5대 핵심 기능</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-num">01</span><div><strong>텍스트 포스트</strong> 최대 500자의 짧은 글로 사진 없이 일상 단상·유머·의견을 파편적으로 공유. 즉각적인 댓글과 토론이 활발합니다.</div></li>
+                        <li><span class="feature-num">02</span><div><strong>인스타그램 연동 (IG Sync)</strong> 기존 팔로워를 그대로 가져오고 스레드 글을 인스타 스토리로 교차 공유해 트래픽 전환이 쉽습니다.</div></li>
+                        <li><span class="feature-num">03</span><div><strong>멘션 및 재게시 (Repost)</strong> 재치 있는 인용 댓글로 타인의 글에 올라타 바이럴을 만들고 노출을 증폭시킵니다.</div></li>
+                        <li><span class="feature-num">04</span><div><strong>타래 엮기</strong> 500자 제한을 넘는 긴 이야기를 여러 포스트로 연결해 한 편의 연재물처럼 몰입도를 높입니다.</div></li>
+                        <li><span class="feature-num">05</span><div><strong>주제 태그 및 검색</strong> 긴 문구 자체를 태그로 묶어 실시간 화제 키워드에 편승해 불특정 다수 노출을 극대화합니다.</div></li>
+                    </ul>
+                </section>
+
+                <div class="two-columns">
+                    <section class="info-section target-users">
+                        <h3><i class="fa-solid fa-users"></i> 타깃 유저</h3>
+                        <p class="highlight-text">10대 후반 ~ 30대 초반</p>
+                        <p class="sub-text">각 잡힌 사진보다 솔직한 감정·유머·B급 감성으로 티키타카를 즐기는 층</p>
+                    </section>
+                    <section class="info-section operation-tips">
+                        <h3><i class="fa-solid fa-rocket"></i> 초보자 운영 팁</h3>
+                        <ol class="tips-list">
+                            <li>정보성 글보다 <strong>공감형 질문체 단문</strong>으로 첫 댓글을 유도.</li>
+                            <li>스레드 글을 즉시 <strong>인스타 스토리로 공유</strong>해 지인을 첫 팔로워로 전환.</li>
+                            <li>추천 피드 이웃의 글에 <strong>재치 있는 티키타카(답글)</strong>로 적극 소통.</li>
+                        </ol>
+                    </section>
+                </div>
+
+                <section class="info-section trend-news-section hidden" id="trends-threads">
+                    <h3><i class="fa-solid fa-newspaper"></i> 최신 트렌드 뉴스 <span class="update-time" id="time-threads"></span></h3>
+                    <ul class="news-list" id="news-threads"></ul>
+                </section>
+            </div>
+        </article>
+
+        <!-- ===== 5. X ===== -->
+        <article class="sns-card" id="x" data-sns="x">
+            <header class="card-header">
+                <i class="fa-brands fa-x-twitter card-icon"></i>
+                <div>
+                    <h2>X <span style="font-size:1rem;font-weight:400;opacity:0.6">(구 Twitter)</span></h2>
+                    <span class="card-subtitle">글로벌 실시간 뉴스 & 서브컬처 세계관</span>
+                </div>
+            </header>
+            <div class="card-body">
+                <section class="info-section feature-highlight">
+                    <h3><i class="fa-solid fa-lightbulb"></i> 차별화 특징</h3>
+                    <p>익명성 기반으로 <strong>전 세계 트렌드가 가장 먼저 생산되고 퍼지는</strong> 뉴스 브레이커 공간. 특정 분야 매니아들의 결속력이 SNS 중 가장 강하고 끈끈합니다.</p>
+                </section>
+
+                <section class="info-section">
+                    <h3><i class="fa-solid fa-layer-group"></i> 5대 핵심 기능</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-num">01</span><div><strong>실시간 트렌드 (Trending)</strong> 1초 단위로 갱신되는 글로벌·국내 핫 키워드 순위. 어떤 이슈가 뉴스보다 먼저 터졌는지 파악하는 나침반입니다.</div></li>
+                        <li><span class="feature-num">02</span><div><strong>리포스트 (RT)</strong> 버튼 한 번으로 팔로워 타임라인에 살포하는 정보 확산 무기. 이슈·유머 글이 눈사태처럼 바이럴되는 X만의 생태계 근간입니다.</div></li>
+                        <li><span class="feature-num">03</span><div><strong>커뮤니티 (Communities)</strong> K팝·애니·개발자 등 동일 취향 매니아끼리 폐쇄적으로 교류하는 안전 지대. 외부 잡음 없는 코어 토론 공간입니다.</div></li>
+                        <li><span class="feature-num">04</span><div><strong>스페이스 (Spaces)</strong> 음성 실시간 오디오 방으로 팟캐스트 감성의 심층 팬 네트워킹과 전문가 토크를 지원합니다.</div></li>
+                        <li><span class="feature-num">05</span><div><strong>X 프리미엄</strong> 월정액으로 파란 배지·장문 허용·광고 수익 배분(리워드)을 제공하는 크리에이터 구독 모델입니다.</div></li>
+                    </ul>
+                </section>
+
+                <div class="two-columns">
+                    <section class="info-section target-users">
+                        <h3><i class="fa-solid fa-users"></i> 타깃 유저</h3>
+                        <p class="highlight-text">10대 ~ 30대 서브컬처 & 전문 직군</p>
+                        <p class="sub-text">K팝·애니 덕질 팬덤부터 IT 개발자, 주식·크립토 정보 교류층까지</p>
+                    </section>
+                    <section class="info-section operation-tips">
+                        <h3><i class="fa-solid fa-rocket"></i> 초보자 운영 팁</h3>
+                        <ol class="tips-list">
+                            <li><strong>단 하나의 틈새 관심사</strong>를 정해 해당 주제만 전문적으로 포스팅.</li>
+                            <li><strong>실시간 트렌드 키워드</strong>와 내 관심사를 결합해 시의성 있게 노출.</li>
+                            <li>비슷한 유저 발견 시 좋아요 + 답글로 <strong>맞팔(뮤추얼) 네트워크를 직접 개척</strong>.</li>
+                        </ol>
+                    </section>
+                </div>
+
+                <section class="info-section trend-news-section hidden" id="trends-x">
+                    <h3><i class="fa-solid fa-newspaper"></i> 최신 트렌드 뉴스 <span class="update-time" id="time-x"></span></h3>
+                    <ul class="news-list" id="news-x"></ul>
+                </section>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 SNS Trends Guide — <a href="https://chudadawhy.github.io/design" target="_blank">chudadawhy.github.io/design</a></p>
+        <p class="footer-sub">뉴스 데이터 제공: <a href="https://gnews.io" target="_blank" rel="noopener">GNews API</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
