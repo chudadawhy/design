@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EQQUALBERRY — July Content Calendar</title>
+<title>EQQUALBERRY — July 2026 Content Calendar</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -437,7 +437,7 @@
 </div>
 
 <header>
-  <h1>EQQUALBERRY — July 2025 Content Calendar</h1>
+  <h1>EQQUALBERRY — July 2026 Content Calendar</h1>
   <div class="header-right">
     <span id="save-status">—</span>
     <button class="btn-save-now" id="btn-save-now" onclick="saveNow()">저장하기</button>
@@ -685,7 +685,7 @@ function saveNow() {
 function buildCalendar() {
   const grid = document.getElementById('calendar-grid');
   grid.innerHTML = '';
-  const startDay = 2; // July 2025 starts on Tuesday
+  const startDay = 3; // July 2026 starts on Wednesday
   const totalDays = 31;
   const weeks = Math.ceil((startDay + totalDays) / 7);
   let dayNum = 1;
@@ -698,7 +698,7 @@ function buildCalendar() {
       if (idx < startDay || dayNum > totalDays) {
         cell.className = 'day-cell empty';
       } else {
-        const date = `2025-07-${String(dayNum).padStart(2,'0')}`;
+        const date = `2026-07-${String(dayNum).padStart(2,'0')}`;
         cell.className = 'day-cell';
         cell.dataset.date = date;
         const numEl = document.createElement('span');
