@@ -529,6 +529,8 @@
 const BIN_ID  = '6a41dbb2da38895dfe0dc723';
 const API_KEY = '$2a$10$.7SBk15RcVNdjKoMAr4XXe7DHPvfTxh/fzxLY4Z1QnuEesVacuDXi';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS_READ  = { 'X-Master-Key': API_KEY };
+const HEADERS_WRITE = { 'X-Master-Key': API_KEY, 'Content-Type': 'application/json' };
 
 // ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
 const DEFAULT_CARDS = [
@@ -622,7 +624,7 @@ let isDirty = false;
 async function loadFromBin() {
   try {
     const res = await fetch(`${BIN_URL}/latest`, {
-      headers: { 'X-Access-Key': API_KEY }
+      headers: HEADERS_READ
     });
     if (!res.ok) throw new Error(res.status);
     const json = await res.json();
@@ -643,10 +645,7 @@ async function saveToBin() {
   try {
     const res = await fetch(BIN_URL, {
       method: 'PUT',
-      headers: {
-        'X-Access-Key': API_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: HEADERS_WRITE,
       body: JSON.stringify({ cards })
     });
     if (!res.ok) throw new Error(res.status);
