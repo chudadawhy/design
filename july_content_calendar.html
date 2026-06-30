@@ -274,10 +274,18 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #555;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 3px;
+  }
+
+  .card-tag-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
   }
 
   .card-format-badge {
@@ -289,10 +297,17 @@
     font-weight: 600;
   }
 
+  .card-memo-dot {
+    font-size: 9px;
+    opacity: 0.7;
+    cursor: default;
+    line-height: 1;
+  }
+
   .card-title {
     font-size: 10px;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.4;
     color: #111;
     outline: none;
     border: none;
@@ -300,20 +315,29 @@
     width: 100%;
     resize: none;
     font-family: inherit;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    display: block;
   }
-  .card-title:focus { background: rgba(255,255,255,0.75); border-radius: 2px; padding: 1px 3px; margin: -1px -3px; }
+  .card-title:focus { background: rgba(255,255,255,0.75); border-radius: 2px; padding: 1px 3px; margin: -1px -3px 2px; }
+
+  .card-divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    margin: 3px 0;
+  }
 
   .card-hook {
     font-size: 9px;
-    color: #777;
-    line-height: 1.35;
+    color: #666;
+    line-height: 1.4;
     outline: none;
     border: none;
     background: transparent;
     width: 100%;
     resize: none;
     font-family: inherit;
+    font-style: italic;
+    display: block;
   }
   .card-hook:focus { background: rgba(255,255,255,0.75); border-radius: 2px; padding: 1px 3px; margin: -1px -3px; }
 
@@ -848,8 +872,12 @@ function createCardEl(card) {
     <div class="card-tag">
       ${escHtml(card.tagLabel)}
       <span class="card-format-badge">${escHtml(card.format)}</span>
+      <span class="card-tag-right">
+        <span class="card-memo-dot" title="메모 있음" style="display:${card.memo ? 'inline' : 'none'}">📝</span>
+      </span>
     </div>
     <textarea class="card-title" rows="1">${escHtml(card.title)}</textarea>
+    <hr class="card-divider">
     <textarea class="card-hook" rows="2">${escHtml(card.hook)}</textarea>
     <div class="card-actions">
       <button class="card-btn" data-action="edit">✏️ 편집</button>
@@ -857,7 +885,7 @@ function createCardEl(card) {
       <button class="card-btn" data-action="memo">📝 메모</button>
       <button class="card-btn delete" data-action="delete">✕</button>
     </div>
-    <div class="memo-box ${card.memo ? 'open' : ''}">
+    <div class="memo-box">
       <textarea class="memo-input" placeholder="메모, 촬영 상태, 진행 노트...">${escHtml(card.memo)}</textarea>
     </div>
   `;
@@ -874,7 +902,14 @@ function createCardEl(card) {
 
   const memoInput = el.querySelector('.memo-input');
   memoInput.addEventListener('mousedown', e => e.stopPropagation());
-  memoInput.addEventListener('change', () => { const c = cards.find(c=>c.id===card.id); if(c){c.memo=memoInput.value; markDirty();} });
+  memoInput.addEventListener('change', () => {
+    const c = cards.find(c=>c.id===card.id);
+    if(c){
+      c.memo = memoInput.value;
+      el.querySelector('.card-memo-dot').style.display = c.memo ? 'inline' : 'none';
+      markDirty();
+    }
+  });
 
   el.querySelector('[data-action="edit"]').addEventListener('click', e => { e.stopPropagation(); openEditModal(card.id); });
 
