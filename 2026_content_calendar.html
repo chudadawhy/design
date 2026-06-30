@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQQUALBERRY — 2026 Content Calendar</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #f8f8f6;
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #fff;
+    border-bottom: 2px solid #111;
+    padding: 13px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  header h1 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 14px; }
+
+  .month-nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  .month-nav a {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    transition: background 0.12s, color 0.12s;
+  }
+  .month-nav a:hover { background: #f0f0f0; color: #111; }
+  .month-nav a.active { background: #111; color: #fff; }
+
+  #save-status {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  #save-status.saving { color: #F5A623; }
+  #save-status.saved  { color: #4CAF50; }
+  #save-status.error  { color: #E33; }
+
+  .btn-save-now {
+    font-size: 11px;
+    font-weight: 700;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-save-now:hover { background: #333; }
+  .btn-save-now:disabled { background: #999; cursor: not-allowed; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    height: calc(100vh - 55px);
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 264px;
+    min-width: 264px;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-top {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+  }
+
+  .btn-new-card {
+    font-size: 10px;
+    font-weight: 700;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-new-card:hover { background: #333; }
+
+  .sidebar-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  /* ── CALENDAR MAIN ── */
+  .calendar-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px 48px;
+  }
+
+  /* ── MONTH SECTION ── */
+  .month-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 64px;
+  }
+
+  .month-header {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #111;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #111;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .month-header span {
+    font-size: 11px;
+    font-weight: 400;
+    color: #aaa;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .week-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 5px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: #bbb;
+    padding: 2px 0 6px;
+    text-transform: uppercase;
+  }
+
+  .month-grid { display: flex; flex-direction: column; gap: 6px; }
+
+  .week-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+
+  .day-cell {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+    min-height: 100px;
+    padding: 7px;
+    position: relative;
+    transition: border-color 0.15s;
+  }
+
+  .day-cell.empty {
+    background: #fafafa;
+    border-color: #f0f0f0;
+    pointer-events: none;
+  }
+
+  .day-cell.drag-over {
+    border-color: #2D5BE3;
+    background: #f0f4ff;
+  }
+
+  .day-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #bbb;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .day-cell:not(.empty) .day-num { color: #666; }
+
+  .day-cell .btn-add-inline {
+    display: none;
+    width: 100%;
+    border: 1.5px dashed #e0e0e0;
+    background: none;
+    border-radius: 4px;
+    padding: 3px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 3px;
+    line-height: 1;
+  }
+  .day-cell:hover .btn-add-inline { display: block; }
+  .day-cell .btn-add-inline:hover { border-color: #999; color: #666; }
+
+  /* ── CARDS ── */
+  .content-card {
+    border-radius: 5px;
+    padding: 6px 8px;
+    margin-bottom: 5px;
+    cursor: grab;
+    border: 1.5px solid transparent;
+    transition: box-shadow 0.12s;
+    user-select: none;
+  }
+  .content-card:active { cursor: grabbing; }
+  .content-card.dragging { opacity: 0.3; }
+
+  .tag-hyaltoin-toner  { background: #E8F0FF; border-color: #B3C8FF; }
+  .tag-hyaltoin-serum  { background: #EAE0FF; border-color: #C4ACFF; }
+  .tag-hyaltoin-cream  { background: #E0F0FF; border-color: #A8D4FF; }
+  .tag-hyaltoin-all    { background: #E0EAFF; border-color: #9BB8FF; }
+  .tag-aloe-reel       { background: #E0F5EE; border-color: #8DDCBC; }
+  .tag-aloe-carousel   { background: #D8F0E8; border-color: #7DCFAE; }
+  .tag-dual-reel       { background: #FFF0E0; border-color: #FFCC8A; }
+  .tag-dual-routine    { background: #FFF5D8; border-color: #FFDE8A; }
+  .tag-persona         { background: #FFE8F0; border-color: #FFAAC8; }
+  .tag-brand           { background: #F0F0F0; border-color: #CCCCCC; }
+
+  .card-tag {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #555;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .card-tag-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .card-format-badge {
+    font-size: 7px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 3px;
+    padding: 1px 4px;
+    color: #555;
+    font-weight: 600;
+  }
+
+  .card-memo-dot {
+    font-size: 9px;
+    opacity: 0.7;
+    cursor: default;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #111;
+    outline: none;
+    border-radius: 3px;
+    padding: 2px 3px;
+    margin: 0 -3px 2px;
+    cursor: text;
+    word-break: break-word;
+    min-height: 16px;
+  }
+  .card-title:focus { background: rgba(255,255,255,0.8); }
+  .card-title:empty::before { content: attr(data-placeholder); color: #bbb; font-weight: 400; }
+
+  .card-divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin: 3px 0;
+  }
+
+  .card-hook {
+    font-size: 9px;
+    color: #555;
+    line-height: 1.45;
+    outline: none;
+    border-radius: 3px;
+    padding: 2px 3px;
+    margin: 0 -3px;
+    cursor: text;
+    word-break: break-word;
+    font-style: italic;
+    min-height: 14px;
+  }
+  .card-hook:focus { background: rgba(255,255,255,0.8); }
+  .card-hook:empty::before { content: attr(data-placeholder); color: #bbb; font-style: normal; }
+
+  .card-actions {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .content-card:hover .card-actions { opacity: 1; }
+
+  .card-btn {
+    font-size: 8px;
+    padding: 2px 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.85);
+    cursor: pointer;
+    color: #555;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .card-btn:hover { background: #fff; color: #111; }
+  .card-btn.delete:hover { color: #E33; }
+
+  .memo-box { display: none; margin-top: 5px; }
+  .memo-box.open { display: block; }
+
+  .memo-input {
+    width: 100%;
+    font-size: 9px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 4px 6px;
+    background: rgba(255,255,255,0.8);
+    font-family: inherit;
+    resize: none;
+    color: #444;
+    line-height: 1.5;
+    outline: none;
+    min-height: 38px;
+  }
+  .memo-input:focus { border-color: #2D5BE3; background: #fff; }
+  .memo-input::placeholder { color: #ccc; }
+
+  /* ── LOADING ── */
+  #loading-overlay {
+    position: fixed; inset: 0;
+    background: rgba(255,255,255,0.92);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  #loading-overlay.hidden { display: none; }
+  .loader {
+    width: 30px; height: 30px;
+    border: 3px solid #eee;
+    border-top-color: #111;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-msg { font-size: 12px; color: #999; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 520px;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+  }
+
+  .modal h2 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 14px;
+  }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field.full { grid-column: 1 / -1; }
+
+  .modal-field label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: 4px;
+  }
+
+  .modal-field input,
+  .modal-field textarea,
+  .modal-field select {
+    width: 100%;
+    font-size: 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: inherit;
+    color: #111;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fff;
+  }
+  .modal-field input:focus,
+  .modal-field textarea:focus,
+  .modal-field select:focus { border-color: #2D5BE3; }
+  .modal-field textarea { resize: vertical; min-height: 64px; }
+
+  .modal-actions {
+    display: flex; gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    background: #111; color: #fff; border: none;
+    border-radius: 6px; padding: 8px 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #333; }
+
+  .btn-secondary {
+    background: #fff; color: #555;
+    border: 1.5px solid #ddd; border-radius: 6px;
+    padding: 8px 16px; font-size: 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { border-color: #aaa; }
+
+  .sidebar-empty {
+    text-align: center; padding: 16px;
+    font-size: 10px; color: #ccc;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loader"></div>
+  <div id="loading-msg">데이터 불러오는 중...</div>
+</div>
+
+<header>
+  <h1>EQQUALBERRY — 2026 Content Calendar</h1>
+  <div class="header-right">
+    <nav class="month-nav">
+      <a href="#m07">7월</a>
+      <a href="#m08">8월</a>
+      <a href="#m09">9월</a>
+      <a href="#m10">10월</a>
+      <a href="#m11">11월</a>
+      <a href="#m12">12월</a>
+    </nav>
+    <span id="save-status">—</span>
+    <button class="btn-save-now" id="btn-save-now" onclick="saveNow()">저장하기</button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <span class="sidebar-label">📦 미배정 콘텐츠</span>
+      <button class="btn-new-card" onclick="openNewModal('unscheduled')">+ 새 카드</button>
+    </div>
+    <div class="sidebar-list" id="sidebar-pool" data-date="unscheduled"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="calendar-main" id="calendar-main"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-heading">콘텐츠 편집</h2>
+    <div class="modal-grid">
+      <div class="modal-field">
+        <label>포맷</label>
+        <select id="modal-format">
+          <option value="릴스">릴스</option>
+          <option value="캐러셀">캐러셀</option>
+          <option value="단컷">단컷</option>
+          <option value="스토리">스토리</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>라인 태그</label>
+        <select id="modal-tag">
+          <option value="tag-hyaltoin-toner">히알토인 토너</option>
+          <option value="tag-hyaltoin-serum">히알토인 세럼</option>
+          <option value="tag-hyaltoin-cream">히알토인 크림</option>
+          <option value="tag-hyaltoin-all">히알토인 풀라인</option>
+          <option value="tag-aloe-reel">알로에 PDRN 릴스</option>
+          <option value="tag-aloe-carousel">알로에 PDRN 캐러셀</option>
+          <option value="tag-dual-reel">두 라인 연결 릴스</option>
+          <option value="tag-dual-routine">두 라인 루틴</option>
+          <option value="tag-persona">페르소나</option>
+          <option value="tag-brand">브랜드</option>
+        </select>
+      </div>
+      <div class="modal-field full">
+        <label>콘텐츠 제목</label>
+        <input type="text" id="modal-title" placeholder="콘텐츠 제목" />
+      </div>
+      <div class="modal-field full">
+        <label>훅 / 핵심 메시지</label>
+        <textarea id="modal-hook" placeholder="첫 3초 훅 또는 핵심 메시지"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>비주얼 방향</label>
+        <textarea id="modal-visual" placeholder="연출 방향, 컬러, 앵글 등"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>캡션 초안</label>
+        <textarea id="modal-caption" placeholder="인스타그램 캡션 초안" style="min-height:80px;"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>메모 / 진행 상황</label>
+        <textarea id="modal-memo" placeholder="촬영 상태, 수정 사항, 진행 노트 등"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">취소</button>
+      <button class="btn-primary" onclick="saveModal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const BIN_ID  = '6a41dbb2da38895dfe0dc723';
+const API_KEY = '$2a$10$.7SBk15RcVNdjKoMAr4XXe7DHPvfTxh/fzxLY4Z1QnuEesVacuDXi';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS_READ  = { 'X-Master-Key': API_KEY };
+const HEADERS_WRITE = { 'X-Master-Key': API_KEY, 'Content-Type': 'application/json' };
+
+// ─── MONTH CONFIG ────────────────────────────────────────────────────────────
+const MONTHS = [
+  { key: '07', label: '7월', eng: 'July',      startDay: 3, days: 31 },
+  { key: '08', label: '8월', eng: 'August',    startDay: 6, days: 31 },
+  { key: '09', label: '9월', eng: 'September', startDay: 2, days: 30 },
+  { key: '10', label: '10월', eng: 'October',  startDay: 4, days: 31 },
+  { key: '11', label: '11월', eng: 'November', startDay: 0, days: 30 },
+  { key: '12', label: '12월', eng: 'December', startDay: 2, days: 31 },
+];
+
+const TAG_LABELS = {
+  'tag-hyaltoin-toner':'히알토인 토너','tag-hyaltoin-serum':'히알토인 세럼',
+  'tag-hyaltoin-cream':'히알토인 크림','tag-hyaltoin-all':'히알토인 풀라인',
+  'tag-aloe-reel':'알로에 PDRN 릴스','tag-aloe-carousel':'알로에 PDRN 캐러셀',
+  'tag-dual-reel':'두 라인 연결 릴스','tag-dual-routine':'두 라인 루틴',
+  'tag-persona':'페르소나','tag-brand':'브랜드'
+};
+
+// ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
+const DEFAULT_CARDS = [
+  { id:'c01', tag:'tag-hyaltoin-toner', format:'릴스', tagLabel:'히알토인 토너',
+    title:'토너의 변신: 젤이 에센스가 된다',
+    hook:'손에 올리면 젤. 피부에 닿으면 에센스. 이게 수분 흡수의 시작이야.',
+    visual:'하얀 배경. 토너를 손등에 올리는 클로즈업. 젤이 퍼지며 투명해지는 텍스처 변화. 선명한 파란빛 제품 클러스터.',
+    caption:'Hyaltoin Toner — 수분의 첫 번째 파동.\n\n젤 텍스처가 피부에 닿는 순간, 에센스로 전환됩니다.\nHyaltoin 복합체가 피부 표면을 즉시 채우고,\n다음 단계의 흡수를 준비합니다.\n\n#이퀄베리 #히알토인토너 #수분루틴 #여름피부',
+    memo:'', date:'unscheduled' },
+  { id:'c02', tag:'tag-hyaltoin-serum', format:'캐러셀', tagLabel:'히알토인 세럼',
+    title:'11가지 히알루론산이 한 병에 — 왜 11가지여야 하나',
+    hook:'히알루론산 1종 vs 11종. 피부 깊이에 따라 분자 크기가 달라야 한다.',
+    visual:'하얀 배경. 세럼 병 + 에센스 텍스처 매크로 샷. 슬라이드마다 분자 크기별 레이어 인포그래픽.',
+    caption:'Good question: 히알루론산 하나로 충분할까?\n\n피부 각 층은 다른 분자 크기의 수분 분자가 필요합니다.\nHyaltoin Serum은 11가지 HA + 5가지 세라마이드로\n표피부터 기저층까지 수분을 채웁니다.\n\n#이퀄베리 #히알토인세럼 #수분세럼 #성분분석',
+    memo:'', date:'unscheduled' },
+  { id:'c03', tag:'tag-hyaltoin-cream', format:'릴스', tagLabel:'히알토인 크림',
+    title:'100시간 수분 — 빙하수 10%가 봉인한다',
+    hook:'수분을 채우는 건 세럼. 잠그는 건 크림. 그 차이가 100시간이다.',
+    visual:'하얀 배경. 크림 텍스처를 스패츌러로 들어올리는 샷. 크리미하고 두꺼운 볼륨.',
+    caption:'Hyaltoin Cream — 수분을 봉인하는 마지막 단계.\n\n빙하수 10% 함유. 100시간 수분 지속 임상 확인.\n세럼이 채운 수분을 크림이 봉인합니다.\n\n#이퀄베리 #히알토인크림 #수분크림 #100시간수분',
+    memo:'', date:'unscheduled' },
+  { id:'c04', tag:'tag-hyaltoin-all', format:'캐러셀', tagLabel:'히알토인 풀라인',
+    title:'Skin Flooding 3-Step — 토너→세럼→크림',
+    hook:'레이어링이 아니라 흘려보내는 것. Skin Flooding은 순서가 전부다.',
+    visual:'하얀 배경. 토너→세럼→크림 3병 나란히. 각 슬라이드에 스텝별 역할 카드.',
+    caption:'The order matters.\n\nStep 1 — 토너: 피부를 열고 첫 수분 파동\nStep 2 — 세럼: 11가지 HA로 깊이 채우기\nStep 3 — 크림: 100시간 봉인\n\n#이퀄베리 #스킨플러딩 #히알토인라인 #여름루틴',
+    memo:'', date:'unscheduled' },
+  { id:'c05', tag:'tag-aloe-reel', format:'릴스', tagLabel:'알로에 PDRN 릴스',
+    title:'쿨링이 아니다 — 회복이다',
+    hook:'여름에 피부가 달아오르는 건 열 때문이 아니야. 세포가 손상된 거야.',
+    visual:'하얀 배경. 알로에 PDRN 세럼 민트 컬러 제품. 텍스처 클로즈업.',
+    caption:'Good question: 쿨링 제품이 여름에 충분한가?\n\nAloe PDRN은 표면만 식히는 게 아니라\nPDRN으로 세포 회복을 시작합니다.\n\n#이퀄베리 #알로에PDRN #여름피부 #피부회복',
+    memo:'', date:'unscheduled' },
+  { id:'c06', tag:'tag-aloe-carousel', format:'캐러셀', tagLabel:'알로에 PDRN 캐러셀',
+    title:'PDRN이 뭔지 물어봤어? — 성분 서사',
+    hook:'PDRN. 들어봤는데 모르는 성분. 우리가 왜 넣었는지 설명해줄게.',
+    visual:'하얀 배경. 슬라이드마다 성분 클로즈업 + 짧은 설명 텍스트. 민트 + 화이트.',
+    caption:'PDRN — Polynucleotide.\n연어 DNA에서 추출한 세포 재생 성분.\n\nWe question what is taken for granted.\n그래서 알로에에 PDRN을 더했습니다.\n\n#이퀄베리 #PDRN #성분분석 #피부과학',
+    memo:'', date:'unscheduled' },
+  { id:'c07', tag:'tag-dual-reel', format:'릴스', tagLabel:'두 라인 연결 릴스',
+    title:'여름 피부 메커니즘 — 왜 순서가 알로에 먼저인가',
+    hook:'여름에 수분 세럼부터 쓰는 사람에게. 순서가 틀렸을 수도 있어.',
+    visual:'하얀 배경. 알로에 PDRN + 히알토인 두 제품. 좌→우 순서 강조.',
+    caption:'먼저 회복하고 (Aloe PDRN)\n그 다음 채우세요 (Hyaltoin)\n\n이것이 EQQUALBERRY의 여름 루틴입니다.\n\n#이퀄베리 #여름루틴 #피부메커니즘',
+    memo:'', date:'unscheduled' },
+  { id:'c08', tag:'tag-dual-routine', format:'캐러셀', tagLabel:'두 라인 루틴',
+    title:'진정 먼저, 수분 다음 — 7월 루틴 정리',
+    hook:'알로에 PDRN → 히알토인 토너 → 세럼 → 크림. 순서가 루틴이다.',
+    visual:'하얀 배경. 4개 제품 순서대로 배치. 스텝 넘버 + 역할 설명.',
+    caption:'July Routine — 4 Steps\n\n01. Aloe PDRN 세럼 — 진정 + 세포 회복\n02. Hyaltoin 토너 — 수분 채널 열기\n03. Hyaltoin 세럼 — 11종 HA 깊이 충전\n04. Hyaltoin 크림 — 100시간 봉인\n\n#이퀄베리 #7월루틴 #여름스킨케어',
+    memo:'', date:'unscheduled' },
+  { id:'c09', tag:'tag-persona', format:'릴스', tagLabel:'페르소나',
+    title:'She already knows — 여름 씬',
+    hook:'설명이 필요 없는 사람. 그녀는 이미 알고 있다.',
+    visual:'일상의 틈새. 책상 위, 이동 중 잠깐의 루틴. 완벽하지 않은 공간에서 빛나는 피부.',
+    caption:'질문은 스스로 먼저 했다.\n답을 찾는 것도 스스로 했다.\n\nShe already knows.\n\n#이퀄베리 #스킨케어루틴 #여름피부',
+    memo:'', date:'unscheduled' },
+  { id:'c10', tag:'tag-brand', format:'단컷', tagLabel:'브랜드',
+    title:'Good question. Even in summer.',
+    hook:'계절이 바뀌어도 질문은 계속된다.',
+    visual:'화이트 배경. 타이포그래피 중심. 선명한 컬러 포인트 제품 하나.',
+    caption:'Good question. Even in summer.\n\nWe question what is taken for granted\nand seek answers through science.\n\n#이퀄베리 #EQQUALBERRY #GoodQuestion',
+    memo:'', date:'unscheduled' }
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let cards = [];
+let dragCardId = null;
+let editingCardId = null;
+let saveTimer = null;
+
+// ─── JSONBIN ──────────────────────────────────────────────────────────────────
+async function loadFromBin() {
+  try {
+    const res = await fetch(`${BIN_URL}/latest`, { headers: HEADERS_READ });
+    if (!res.ok) throw new Error(res.status);
+    const json = await res.json();
+    const data = json.record;
+    if (Array.isArray(data)) return data.length ? data : DEFAULT_CARDS;
+    if (data && Array.isArray(data.cards)) return data.cards.length ? data.cards : DEFAULT_CARDS;
+    return DEFAULT_CARDS;
+  } catch (e) {
+    console.error('Load error:', e);
+    return DEFAULT_CARDS;
+  }
+}
+
+async function saveToBin() {
+  setStatus('saving');
+  document.getElementById('btn-save-now').disabled = true;
+  try {
+    const res = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: HEADERS_WRITE,
+      body: JSON.stringify({ cards })
+    });
+    if (!res.ok) throw new Error(res.status);
+    setStatus('saved');
+  } catch (e) {
+    console.error('Save error:', e);
+    setStatus('error');
+  } finally {
+    document.getElementById('btn-save-now').disabled = false;
+  }
+}
+
+function setStatus(s) {
+  const el = document.getElementById('save-status');
+  el.className = s;
+  if (s === 'saving') el.textContent = '저장 중...';
+  else if (s === 'saved') el.textContent = '✓ 저장됨';
+  else if (s === 'error') el.textContent = '⚠ 저장 실패';
+  else el.textContent = '—';
+}
+
+function markDirty() {
+  setStatus('');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToBin, 2500);
+}
+
+function saveNow() { clearTimeout(saveTimer); saveToBin(); }
+
+// ─── BUILD CALENDAR ───────────────────────────────────────────────────────────
+function buildCalendar() {
+  const main = document.getElementById('calendar-main');
+  main.innerHTML = '';
+
+  MONTHS.forEach(month => {
+    const section = document.createElement('div');
+    section.className = 'month-section';
+    section.id = `m${month.key}`;
+
+    // Month header
+    const header = document.createElement('div');
+    header.className = 'month-header';
+    header.innerHTML = `${month.label} <span>${month.eng} 2026</span>`;
+    section.appendChild(header);
+
+    // Week day headers
+    const weekHeaders = document.createElement('div');
+    weekHeaders.className = 'week-headers';
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const dh = document.createElement('div');
+      dh.className = 'day-header';
+      dh.textContent = d;
+      weekHeaders.appendChild(dh);
+    });
+    section.appendChild(weekHeaders);
+
+    // Grid
+    const grid = document.createElement('div');
+    grid.className = 'month-grid';
+    const totalCells = month.startDay + month.days;
+    const weeks = Math.ceil(totalCells / 7);
+    let dayNum = 1;
+
+    for (let w = 0; w < weeks; w++) {
+      const row = document.createElement('div');
+      row.className = 'week-row';
+      for (let d = 0; d < 7; d++) {
+        const cell = document.createElement('div');
+        const idx = w * 7 + d;
+        if (idx < month.startDay || dayNum > month.days) {
+          cell.className = 'day-cell empty';
+        } else {
+          const date = `2026-${month.key}-${String(dayNum).padStart(2,'0')}`;
+          cell.className = 'day-cell';
+          cell.dataset.date = date;
+          const numEl = document.createElement('span');
+          numEl.className = 'day-num';
+          numEl.textContent = dayNum;
+          cell.appendChild(numEl);
+          const addBtn = document.createElement('button');
+          addBtn.className = 'btn-add-inline';
+          addBtn.textContent = '+';
+          addBtn.addEventListener('click', () => openNewModal(date));
+          cell.appendChild(addBtn);
+          setupDropTarget(cell, date);
+          dayNum++;
+        }
+        row.appendChild(cell);
+      }
+      grid.appendChild(row);
+    }
+
+    section.appendChild(grid);
+    main.appendChild(section);
+  });
+
+  // Sidebar drop
+  const pool = document.getElementById('sidebar-pool');
+  pool.addEventListener('dragover', e => { e.preventDefault(); pool.style.background = '#f0f4ff'; });
+  pool.addEventListener('dragleave', () => { pool.style.background = ''; });
+  pool.addEventListener('drop', e => {
+    e.preventDefault(); pool.style.background = '';
+    if (dragCardId) {
+      const card = cards.find(c => c.id === dragCardId);
+      if (card) { card.date = 'unscheduled'; markDirty(); renderAll(); }
+    }
+  });
+}
+
+function setupDropTarget(el, date) {
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', e => { if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over'); });
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('drag-over');
+    if (dragCardId) {
+      const card = cards.find(c => c.id === dragCardId);
+      if (card) { card.date = date; markDirty(); renderAll(); }
+    }
+  });
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderAll() {
+  document.querySelectorAll('.day-cell:not(.empty) .content-card').forEach(e => e.remove());
+  document.getElementById('sidebar-pool').innerHTML = '';
+
+  cards.forEach(card => {
+    const el = createCardEl(card);
+    if (card.date === 'unscheduled') {
+      document.getElementById('sidebar-pool').appendChild(el);
+    } else {
+      const cell = document.querySelector(`.day-cell[data-date="${card.date}"]`);
+      if (cell) {
+        cell.insertBefore(el, cell.querySelector('.btn-add-inline'));
+      } else {
+        card.date = 'unscheduled';
+        document.getElementById('sidebar-pool').appendChild(el);
+      }
+    }
+  });
+
+  if (!document.getElementById('sidebar-pool').children.length) {
+    const empty = document.createElement('div');
+    empty.className = 'sidebar-empty';
+    empty.textContent = '모든 콘텐츠가 배정됨';
+    document.getElementById('sidebar-pool').appendChild(empty);
+  }
+
+  updateMonthNav();
+}
+
+function createCardEl(card) {
+  const el = document.createElement('div');
+  el.className = `content-card ${card.tag}`;
+  el.draggable = true;
+  el.dataset.id = card.id;
+
+  el.innerHTML = `
+    <div class="card-tag">
+      ${escHtml(card.tagLabel)}
+      <span class="card-format-badge">${escHtml(card.format)}</span>
+      <span class="card-tag-right">
+        <span class="card-memo-dot" title="메모 있음" style="display:${card.memo ? 'inline' : 'none'}">📝</span>
+      </span>
+    </div>
+    <div class="card-title" contenteditable="true" data-placeholder="제목">${escHtml(card.title)}</div>
+    <hr class="card-divider">
+    <div class="card-hook" contenteditable="true" data-placeholder="훅 / 핵심 메시지">${escHtml(card.hook)}</div>
+    <div class="card-actions">
+      <button class="card-btn" data-action="edit">✏️ 편집</button>
+      <button class="card-btn" data-action="copy">⧉ 복사</button>
+      <button class="card-btn" data-action="memo">📝 메모</button>
+      <button class="card-btn delete" data-action="delete">✕</button>
+    </div>
+    <div class="memo-box">
+      <textarea class="memo-input" placeholder="메모, 촬영 상태, 진행 노트...">${escHtml(card.memo)}</textarea>
+    </div>
+  `;
+
+  const titleDiv = el.querySelector('.card-title');
+  titleDiv.addEventListener('mousedown', e => e.stopPropagation());
+  titleDiv.addEventListener('dragstart', e => e.preventDefault());
+  titleDiv.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) { c.title = titleDiv.innerText.trim(); markDirty(); }
+  });
+
+  const hookDiv = el.querySelector('.card-hook');
+  hookDiv.addEventListener('mousedown', e => e.stopPropagation());
+  hookDiv.addEventListener('dragstart', e => e.preventDefault());
+  hookDiv.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) { c.hook = hookDiv.innerText.trim(); markDirty(); }
+  });
+
+  const memoInput = el.querySelector('.memo-input');
+  memoInput.addEventListener('mousedown', e => e.stopPropagation());
+  memoInput.addEventListener('input', () => autoResize(memoInput));
+  memoInput.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) {
+      c.memo = memoInput.value;
+      el.querySelector('.card-memo-dot').style.display = c.memo ? 'inline' : 'none';
+      markDirty();
+    }
+  });
+
+  el.querySelector('[data-action="edit"]').addEventListener('click', e => { e.stopPropagation(); openEditModal(card.id); });
+
+  el.querySelector('[data-action="copy"]').addEventListener('click', e => {
+    e.stopPropagation();
+    const src = cards.find(c => c.id === card.id);
+    if (!src) return;
+    const copy = { ...JSON.parse(JSON.stringify(src)), id: 'c' + Date.now(), date: 'unscheduled', title: src.title + ' (복사)' };
+    const idx = cards.findIndex(c => c.id === card.id);
+    cards.splice(idx + 1, 0, copy);
+    markDirty(); renderAll();
+  });
+
+  el.querySelector('[data-action="memo"]').addEventListener('click', e => {
+    e.stopPropagation();
+    const box = el.querySelector('.memo-box');
+    box.classList.toggle('open');
+    if (box.classList.contains('open')) memoInput.focus();
+  });
+
+  el.querySelector('[data-action="delete"]').addEventListener('click', e => {
+    e.stopPropagation();
+    if (confirm(`"${card.title}" 삭제하시겠습니까?`)) {
+      cards = cards.filter(c => c.id !== card.id);
+      markDirty(); renderAll();
+    }
+  });
+
+  el.addEventListener('dragstart', e => { dragCardId = card.id; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+  el.addEventListener('dragend', () => { dragCardId = null; el.classList.remove('dragging'); });
+
+  return el;
+}
+
+// ─── MONTH NAV HIGHLIGHT ──────────────────────────────────────────────────────
+function updateMonthNav() {
+  const main = document.getElementById('calendar-main');
+  const sections = document.querySelectorAll('.month-section');
+  const navLinks = document.querySelectorAll('.month-nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { root: main, threshold: 0.3 });
+
+  sections.forEach(s => observer.observe(s));
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────────
+function openEditModal(cardId) {
+  editingCardId = cardId;
+  const card = cards.find(c => c.id === cardId);
+  if (!card) return;
+  document.getElementById('modal-heading').textContent = '콘텐츠 편집';
+  document.getElementById('modal-format').value = card.format;
+  document.getElementById('modal-tag').value = card.tag;
+  document.getElementById('modal-title').value = card.title;
+  document.getElementById('modal-hook').value = card.hook;
+  document.getElementById('modal-visual').value = card.visual || '';
+  document.getElementById('modal-caption').value = card.caption || '';
+  document.getElementById('modal-memo').value = card.memo || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openNewModal(date) {
+  editingCardId = '__new__';
+  document.getElementById('modal-heading').textContent = '새 콘텐츠 추가';
+  ['modal-format','modal-title','modal-hook','modal-visual','modal-caption','modal-memo'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = id === 'modal-format' ? '릴스' : '';
+  });
+  document.getElementById('modal-tag').value = 'tag-brand';
+  document.getElementById('modal-overlay').dataset.newDate = date;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingCardId = null;
+}
+
+function saveModal() {
+  const tag = document.getElementById('modal-tag').value;
+  const data = {
+    tag, tagLabel: TAG_LABELS[tag],
+    format: document.getElementById('modal-format').value,
+    title: document.getElementById('modal-title').value,
+    hook: document.getElementById('modal-hook').value,
+    visual: document.getElementById('modal-visual').value,
+    caption: document.getElementById('modal-caption').value,
+    memo: document.getElementById('modal-memo').value,
+  };
+  if (editingCardId === '__new__') {
+    const date = document.getElementById('modal-overlay').dataset.newDate || 'unscheduled';
+    cards.push({ id: 'c' + Date.now(), date, ...data });
+  } else {
+    const card = cards.find(c => c.id === editingCardId);
+    if (card) Object.assign(card, data);
+  }
+  markDirty(); renderAll(); closeModal();
+}
+
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function autoResize(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(async () => {
+  buildCalendar();
+  cards = await loadFromBin();
+  renderAll();
+  document.getElementById('loading-overlay').classList.add('hidden');
+  setStatus('saved');
+})();
+</script>
+</body>
+</html>
