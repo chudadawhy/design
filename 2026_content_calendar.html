@@ -140,6 +140,7 @@
   .legend-dot.global { background: #111; }
   .legend-dot.cis    { background: #2D5BE3; }
   .legend-dot.mena   { background: #F5A623; }
+  .legend-dot.uk     { background: #D32F2F; }
 
   /* ── ACCOUNT FILTER BUTTONS ── */
   .account-filters {
@@ -163,6 +164,7 @@
   .filter-btn.active-global { background: #111; color: #fff; border-color: #111; }
   .filter-btn.active-cis    { background: #2D5BE3; color: #fff; border-color: #2D5BE3; }
   .filter-btn.active-mena   { background: #F5A623; color: #fff; border-color: #F5A623; }
+  .filter-btn.active-uk     { background: #D32F2F; color: #fff; border-color: #D32F2F; }
   .filter-btn.active-all    { background: #555; color: #fff; border-color: #555; }
 
   /* ── LAYOUT ── */
@@ -332,6 +334,7 @@
   .account-global { border-left: 4px solid #111 !important; }
   .account-cis    { border-left: 4px solid #2D5BE3 !important; }
   .account-mena   { border-left: 4px solid #F5A623 !important; }
+  .account-uk     { border-left: 4px solid #D32F2F !important; }
 
   /* ── CARDS ── */
   .content-card {
@@ -601,12 +604,14 @@
       <div class="legend-item"><div class="legend-dot global"></div>Global</div>
       <div class="legend-item"><div class="legend-dot cis"></div>CIS</div>
       <div class="legend-item"><div class="legend-dot mena"></div>MENA</div>
+      <div class="legend-item"><div class="legend-dot uk"></div>UK</div>
     </div>
     <div class="account-filters">
       <button class="filter-btn active-all" data-filter="all" onclick="filterAccount('all', this)">전체</button>
       <button class="filter-btn" data-filter="global" onclick="filterAccount('global', this)">Global</button>
       <button class="filter-btn" data-filter="cis" onclick="filterAccount('cis', this)">CIS</button>
       <button class="filter-btn" data-filter="mena" onclick="filterAccount('mena', this)">MENA</button>
+      <button class="filter-btn" data-filter="uk" onclick="filterAccount('uk', this)">UK</button>
     </div>
     <nav class="month-nav">
       <a href="#m07">7월</a>
@@ -657,6 +662,7 @@
           <option value="global">🌍 Global</option>
           <option value="cis">🔵 CIS</option>
           <option value="mena">🟠 MENA</option>
+          <option value="uk">🔴 UK</option>
         </select>
       </div>
       <div class="modal-field">
@@ -1154,7 +1160,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 function exportToXLSX() {
-  const ACCOUNT_LABEL = { global: 'Global', cis: 'CIS', mena: 'MENA' };
+  const ACCOUNT_LABEL = { global: 'Global', cis: 'CIS', mena: 'MENA', uk: 'UK' };
 
   // Sort by date (unscheduled last)
   const sorted = [...cards].sort((a, b) => {
