@@ -476,6 +476,95 @@
   .memo-input:focus { border-color: #2D5BE3; background: #fff; }
   .memo-input::placeholder { color: #ccc; }
 
+  /* ── MENTIONS / SLACK ── */
+  .mention-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .mention-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 8px;
+    font-weight: 700;
+    background: #ECE9FE;
+    color: #5B3DF5;
+    border-radius: 10px;
+    padding: 2px 6px;
+  }
+  .mention-chip .x { cursor: pointer; opacity: 0.6; }
+  .mention-chip .x:hover { opacity: 1; }
+  .btn-mention-add {
+    font-size: 8px;
+    font-weight: 700;
+    border: 1px dashed #ccc;
+    background: none;
+    border-radius: 10px;
+    padding: 2px 7px;
+    cursor: pointer;
+    color: #999;
+    font-family: inherit;
+  }
+  .btn-mention-add:hover { border-color: #5B3DF5; color: #5B3DF5; }
+  .mention-picker {
+    position: absolute;
+    z-index: 500;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 140px;
+  }
+  .mention-picker-item {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #444;
+  }
+  .mention-picker-item:hover { background: #f2f2f8; }
+  .mention-picker-item.selected { color: #5B3DF5; }
+  .btn-send-slack {
+    display: block;
+    font-size: 8px;
+    font-weight: 700;
+    background: #4A154B;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 6px;
+  }
+  .btn-send-slack:hover { background: #611f64; }
+  .btn-send-slack:disabled { background: #ccc; cursor: not-allowed; }
+  .slack-sent-note {
+    font-size: 8px;
+    color: #4CAF50;
+    margin-top: 4px;
+  }
+
+  .user-select {
+    font-size: 10px;
+    font-weight: 700;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-family: inherit;
+    color: #111;
+    background: #fff;
+    cursor: pointer;
+  }
+
   /* ── LOADING ── */
   #loading-overlay {
     position: fixed; inset: 0;
@@ -621,6 +710,9 @@
       <a href="#m11">11월</a>
       <a href="#m12">12월</a>
     </nav>
+    <select class="user-select" id="current-user-select" onchange="setCurrentUser(this.value)">
+      <option value="">나는 누구?</option>
+    </select>
     <button class="btn-export" onclick="exportToXLSX()">📊 시트 다운로드</button>
     <a href="https://www.figma.com/design/18eoqhmcgzelWwClNpVkz4/-%EC%9D%B4%ED%80%84%EB%B2%A0%EB%A6%AC-US-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EA%B5%AC%EC%84%B1%EC%95%88?node-id=4479-27&t=9IuO1hSFg5HpYsMa-1" target="_blank" rel="noopener" class="figma-link">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;">
@@ -722,6 +814,24 @@ const API_KEY = '$2a$10$.7SBk15RcVNdjKoMAr4XXe7DHPvfTxh/fzxLY4Z1QnuEesVacuDXi';
 const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const HEADERS_READ  = { 'X-Master-Key': API_KEY };
 const HEADERS_WRITE = { 'X-Master-Key': API_KEY, 'Content-Type': 'application/json' };
+
+// ─── SLACK ────────────────────────────────────────────────────────────────────
+// Slack Webhook URL은 Cloudflare Worker(eqb-slack-relay)에 시크릿으로 보관되어 있고,
+// 이 앱은 그 중계 Worker만 호출한다 (원본 웹훅 URL은 코드에 노출되지 않음).
+const SLACK_RELAY_URL = 'https://eqb-slack-relay.chudadawhy.workers.dev';
+const CALENDAR_URL = 'https://chudadawhy.github.io/design/2026_content_calendar.html';
+
+// #04-뷰티-이퀄베리-온드기획 채널 멤버
+const TEAM_MEMBERS = [
+  { id: 'U08F2MVFSR5', name: '서벼리' },
+  { id: 'U09J93078A2', name: '홍효정' },
+  { id: 'U09K5DJTLUQ', name: '신혜리' },
+  { id: 'U0A0AA74350', name: '최사라' },
+  { id: 'U0A5R60095J', name: '박선인' },
+  { id: 'U0AHL8SMZ9A', name: '김진송' },
+  { id: 'U0AJTQTH9N0', name: '이승은' },
+  { id: 'U0B89FF082X', name: '윤소연' },
+];
 
 // ─── MONTH CONFIG ────────────────────────────────────────────────────────────
 const MONTHS = [
@@ -865,6 +975,133 @@ function markDirty() {
 }
 
 function saveNow() { clearTimeout(saveTimer); saveToBin(); }
+
+// ─── CURRENT USER (for Slack attribution) ─────────────────────────────────────
+function populateUserSelect() {
+  const sel = document.getElementById('current-user-select');
+  TEAM_MEMBERS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.name;
+    sel.appendChild(opt);
+  });
+  const saved = localStorage.getItem('eqb_current_user');
+  if (saved) sel.value = saved;
+}
+
+function setCurrentUser(id) {
+  localStorage.setItem('eqb_current_user', id);
+}
+
+function currentUserName() {
+  const id = localStorage.getItem('eqb_current_user') || '';
+  const m = TEAM_MEMBERS.find(t => t.id === id);
+  return m ? m.name : '팀원';
+}
+
+// ─── MENTIONS ─────────────────────────────────────────────────────────────────
+let openMentionPickerEl = null;
+
+function closeMentionPicker() {
+  if (openMentionPickerEl) { openMentionPickerEl.remove(); openMentionPickerEl = null; }
+  document.removeEventListener('click', closeMentionPicker);
+}
+
+function renderMentions(card, container) {
+  container.innerHTML = '';
+  (card.mentions || []).forEach(uid => {
+    const m = TEAM_MEMBERS.find(t => t.id === uid);
+    if (!m) return;
+    const chip = document.createElement('span');
+    chip.className = 'mention-chip';
+    chip.innerHTML = `@${escHtml(m.name)} <span class="x">✕</span>`;
+    chip.querySelector('.x').addEventListener('mousedown', e => e.stopPropagation());
+    chip.querySelector('.x').addEventListener('click', e => {
+      e.stopPropagation();
+      card.mentions = (card.mentions || []).filter(id => id !== uid);
+      markDirty();
+      renderMentions(card, container);
+    });
+    container.appendChild(chip);
+  });
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn-mention-add';
+  addBtn.textContent = '+ 태그';
+  addBtn.addEventListener('mousedown', e => e.stopPropagation());
+  addBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    openMentionPicker(card, container, addBtn);
+  });
+  container.appendChild(addBtn);
+}
+
+function openMentionPicker(card, container, anchorBtn) {
+  closeMentionPicker();
+  const picker = document.createElement('div');
+  picker.className = 'mention-picker';
+  TEAM_MEMBERS.forEach(m => {
+    const active = (card.mentions || []).includes(m.id);
+    const item = document.createElement('div');
+    item.className = 'mention-picker-item' + (active ? ' selected' : '');
+    item.textContent = (active ? '✓ ' : '') + m.name;
+    item.addEventListener('mousedown', e => e.stopPropagation());
+    item.addEventListener('click', e => {
+      e.stopPropagation();
+      card.mentions = card.mentions || [];
+      if (card.mentions.includes(m.id)) {
+        card.mentions = card.mentions.filter(id => id !== m.id);
+      } else {
+        card.mentions.push(m.id);
+      }
+      markDirty();
+      renderMentions(card, container);
+      closeMentionPicker();
+    });
+    picker.appendChild(item);
+  });
+  document.body.appendChild(picker);
+  const rect = anchorBtn.getBoundingClientRect();
+  picker.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+  picker.style.left = (rect.left + window.scrollX) + 'px';
+  openMentionPickerEl = picker;
+  setTimeout(() => document.addEventListener('click', closeMentionPicker), 0);
+}
+
+// ─── SLACK SEND ───────────────────────────────────────────────────────────────
+async function sendSlackMention(card, btn, noteEl) {
+  const mentions = card.mentions || [];
+  if (!mentions.length) { alert('태그할 사람을 먼저 선택해주세요.'); return; }
+  if (!card.memo || !card.memo.trim()) { alert('먼저 메모를 입력해주세요.'); return; }
+
+  const uname = currentUserName();
+  const mentionText = mentions.map(id => `<@${id}>`).join(' ');
+  const dateLabel = card.date === 'unscheduled' ? '미배정' : card.date;
+
+  const text = `📌 *${uname}*님이 EQQUALBERRY 콘텐츠 캘린더에서 ${mentionText} 님을 태그했습니다.\n\n*카드:* ${card.title || '(제목 없음)'}  \`${dateLabel}\`\n*메모:* ${card.memo}\n\n바로가기: ${CALENDAR_URL}`;
+
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+  try {
+    const res = await fetch(SLACK_RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error('relay status ' + res.status);
+    noteEl.style.color = '#4CAF50';
+    noteEl.textContent = `✓ ${new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}에 전송됨`;
+    noteEl.style.display = 'block';
+  } catch (e) {
+    console.error('Slack send error:', e);
+    noteEl.style.color = '#E33';
+    noteEl.textContent = '⚠ 전송 실패';
+    noteEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📨 태그 알림 보내기';
+  }
+}
 
 // ─── BUILD CALENDAR ───────────────────────────────────────────────────────────
 function buildCalendar() {
@@ -1015,6 +1252,9 @@ function createCardEl(card) {
     </div>
     <div class="memo-box">
       <textarea class="memo-input" placeholder="메모, 촬영 상태, 진행 노트...">${escHtml(card.memo)}</textarea>
+      <div class="mention-row"></div>
+      <button class="btn-send-slack" data-action="send-slack">📨 태그 알림 보내기</button>
+      <div class="slack-sent-note" style="display:none;"></div>
     </div>
   `;
 
@@ -1044,6 +1284,17 @@ function createCardEl(card) {
       el.querySelector('.card-memo-dot').style.display = c.memo ? 'inline' : 'none';
       markDirty();
     }
+  });
+
+  const mentionRow = el.querySelector('.mention-row');
+  renderMentions(card, mentionRow);
+
+  const sendSlackBtn = el.querySelector('[data-action="send-slack"]');
+  const sentNote = el.querySelector('.slack-sent-note');
+  sendSlackBtn.addEventListener('mousedown', e => e.stopPropagation());
+  sendSlackBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    sendSlackMention(card, sendSlackBtn, sentNote);
   });
 
   el.querySelector('[data-action="edit"]').addEventListener('click', e => { e.stopPropagation(); openEditModal(card.id); });
@@ -1218,6 +1469,7 @@ function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 (async () => {
+  populateUserSelect();
   buildCalendar();
   cards = await loadFromBin();
   renderAll();
