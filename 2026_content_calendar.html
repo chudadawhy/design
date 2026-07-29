@@ -141,6 +141,9 @@
   .legend-dot.cis    { background: #2D5BE3; }
   .legend-dot.mena   { background: #F5A623; }
   .legend-dot.uk     { background: #D32F2F; }
+  .legend-dot.us     { background: #2E7D32; }
+  .legend-dot.latam  { background: #8E24AA; }
+  .legend-dot.id     { background: #00897B; }
 
   /* ── ACCOUNT FILTER BUTTONS ── */
   .account-filters {
@@ -165,6 +168,9 @@
   .filter-btn.active-cis    { background: #2D5BE3; color: #fff; border-color: #2D5BE3; }
   .filter-btn.active-mena   { background: #F5A623; color: #fff; border-color: #F5A623; }
   .filter-btn.active-uk     { background: #D32F2F; color: #fff; border-color: #D32F2F; }
+  .filter-btn.active-us     { background: #2E7D32; color: #fff; border-color: #2E7D32; }
+  .filter-btn.active-latam  { background: #8E24AA; color: #fff; border-color: #8E24AA; }
+  .filter-btn.active-id     { background: #00897B; color: #fff; border-color: #00897B; }
   .filter-btn.active-all    { background: #555; color: #fff; border-color: #555; }
 
   /* ── LAYOUT ── */
@@ -335,6 +341,9 @@
   .account-cis    { border-left: 4px solid #2D5BE3 !important; }
   .account-mena   { border-left: 4px solid #F5A623 !important; }
   .account-uk     { border-left: 4px solid #D32F2F !important; }
+  .account-us     { border-left: 4px solid #2E7D32 !important; }
+  .account-latam  { border-left: 4px solid #8E24AA !important; }
+  .account-id     { border-left: 4px solid #00897B !important; }
 
   /* ── CARDS ── */
   .content-card {
@@ -694,6 +703,9 @@
       <div class="legend-item"><div class="legend-dot cis"></div>CIS</div>
       <div class="legend-item"><div class="legend-dot mena"></div>MENA</div>
       <div class="legend-item"><div class="legend-dot uk"></div>UK</div>
+      <div class="legend-item"><div class="legend-dot us"></div>US</div>
+      <div class="legend-item"><div class="legend-dot latam"></div>LATAM</div>
+      <div class="legend-item"><div class="legend-dot id"></div>Indonesia</div>
     </div>
     <div class="account-filters">
       <button class="filter-btn active-all" data-filter="all" onclick="filterAccount('all', this)">전체</button>
@@ -701,6 +713,9 @@
       <button class="filter-btn" data-filter="cis" onclick="filterAccount('cis', this)">CIS</button>
       <button class="filter-btn" data-filter="mena" onclick="filterAccount('mena', this)">MENA</button>
       <button class="filter-btn" data-filter="uk" onclick="filterAccount('uk', this)">UK</button>
+      <button class="filter-btn" data-filter="us" onclick="filterAccount('us', this)">US</button>
+      <button class="filter-btn" data-filter="latam" onclick="filterAccount('latam', this)">LATAM</button>
+      <button class="filter-btn" data-filter="id" onclick="filterAccount('id', this)">Indonesia</button>
     </div>
     <nav class="month-nav">
       <a href="#m07">7월</a>
@@ -755,6 +770,9 @@
           <option value="cis">🔵 CIS</option>
           <option value="mena">🟠 MENA</option>
           <option value="uk">🔴 UK</option>
+          <option value="us">🟢 US</option>
+          <option value="latam">🟣 LATAM</option>
+          <option value="id">🔵 Indonesia</option>
         </select>
       </div>
       <div class="modal-field">
@@ -1420,7 +1438,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 function exportToXLSX() {
-  const ACCOUNT_LABEL = { global: 'Global', cis: 'CIS', mena: 'MENA', uk: 'UK' };
+  const ACCOUNT_LABEL = { global: 'Global', cis: 'CIS', mena: 'MENA', uk: 'UK', us: 'US', latam: 'LATAM', id: 'Indonesia' };
 
   // Sort by date (unscheduled last)
   const sorted = [...cards].sort((a, b) => {
