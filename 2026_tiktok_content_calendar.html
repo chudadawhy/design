@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQQUALBERRY — 2026 TikTok Content Calendar</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #f8f8f6;
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #fff;
+    border-bottom: 2px solid #111;
+    padding: 13px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  header h1 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tt-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: #111;
+    color: #fff;
+    border-radius: 4px;
+    padding: 3px 7px;
+    position: relative;
+  }
+  .tt-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    box-shadow: -1.5px -1.5px 0 #25F4EE, 1.5px 1.5px 0 #FE2C55;
+    z-index: -1;
+  }
+
+  .account-pill {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #111;
+    border-radius: 4px;
+    padding: 4px 9px;
+    white-space: nowrap;
+  }
+
+  .header-right { display: flex; align-items: center; gap: 14px; }
+
+  .month-nav { display: flex; gap: 4px; }
+
+  .month-nav a {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    transition: background 0.12s, color 0.12s;
+  }
+  .month-nav a:hover { background: #f0f0f0; color: #111; }
+  .month-nav a.active { background: #111; color: #fff; }
+
+  #save-status {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  #save-status.saving { color: #F5A623; }
+  #save-status.saved  { color: #4CAF50; }
+  #save-status.error  { color: #E33; }
+
+  .btn-save-now {
+    font-size: 11px;
+    font-weight: 700;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-save-now:hover { background: #333; }
+  .btn-save-now:disabled { background: #999; cursor: not-allowed; }
+
+  .btn-export {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    background: #fff;
+    padding: 5px 10px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-export:hover { border-color: #4CAF50; color: #111; }
+
+  .figma-link {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .figma-link:hover { border-color: #1ABCFE; color: #111; }
+
+  .insta-link {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .insta-link:hover { border-color: #E1306C; color: #111; }
+
+  /* ── FORMAT LEGEND / FILTER ── */
+  .format-legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .filter-btn {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+    background: #f0f0f0;
+    color: #888;
+    white-space: nowrap;
+  }
+  .filter-btn.active-all    { background: #555;     color: #fff; border-color: #555; }
+  .filter-btn.active-short  { background: #FE2C55;  color: #fff; border-color: #FE2C55; }
+  .filter-btn.active-sound  { background: #00A8B5;  color: #fff; border-color: #00A8B5; }
+  .filter-btn.active-vlog   { background: #6D4C41;  color: #fff; border-color: #6D4C41; }
+  .filter-btn.active-etc    { background: #9E9E9E;  color: #fff; border-color: #9E9E9E; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    height: calc(100vh - 55px);
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 264px;
+    min-width: 264px;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-top {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+  }
+
+  .btn-new-card {
+    font-size: 10px;
+    font-weight: 700;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-new-card:hover { background: #333; }
+
+  .sidebar-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  /* ── CALENDAR MAIN ── */
+  .calendar-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px 48px;
+  }
+
+  /* ── MONTH SECTION ── */
+  .month-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 64px;
+  }
+
+  .month-header {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #111;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #111;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .month-header span {
+    font-size: 11px;
+    font-weight: 400;
+    color: #aaa;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .month-count {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: #bbb;
+    letter-spacing: 0.06em;
+  }
+
+  .week-headers {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 5px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    color: #bbb;
+    padding: 2px 0 6px;
+    text-transform: uppercase;
+  }
+
+  .month-grid { display: flex; flex-direction: column; gap: 6px; }
+
+  .week-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+
+  .day-cell {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 7px;
+    min-height: 100px;
+    padding: 7px;
+    position: relative;
+    transition: border-color 0.15s;
+  }
+
+  .day-cell.empty {
+    background: #fafafa;
+    border-color: #f0f0f0;
+    pointer-events: none;
+  }
+
+  .day-cell.drag-over {
+    border-color: #FE2C55;
+    background: #fff2f5;
+  }
+
+  .day-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #bbb;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .day-cell:not(.empty) .day-num { color: #666; }
+
+  .day-cell .btn-add-inline {
+    display: none;
+    width: 100%;
+    border: 1.5px dashed #e0e0e0;
+    background: none;
+    border-radius: 4px;
+    padding: 3px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 3px;
+    line-height: 1;
+  }
+  .day-cell:hover .btn-add-inline { display: block; }
+  .day-cell .btn-add-inline:hover { border-color: #999; color: #666; }
+
+  /* ── ACCOUNT STRIPE (Global only) ── */
+  .account-global { border-left: 4px solid #111 !important; }
+
+  /* ── CARDS ── */
+  .content-card {
+    border-radius: 5px;
+    padding: 6px 8px 6px 7px;
+    margin-bottom: 5px;
+    cursor: grab;
+    border: 1.5px solid transparent;
+    transition: box-shadow 0.12s;
+    user-select: none;
+  }
+  .content-card:active { cursor: grabbing; }
+  .content-card.dragging { opacity: 0.3; }
+  .content-card.hidden-by-filter { display: none; }
+
+  .tag-vita       { background: #FFFDE7; border-color: #FFD600; }
+  .tag-hyaltoin   { background: #E1F5FE; border-color: #65C8F0; }
+  .tag-aloe       { background: #F1F8E9; border-color: #9CCC65; }
+  .tag-bakuchiol  { background: #F3E5F5; border-color: #CE93D8; }
+  .tag-nad        { background: #FCE4EC; border-color: #F48FB1; }
+  .tag-branding   { background: #E8EAF6; border-color: #5C6BC0; }
+  .tag-mixed      { background: #FFF3E0; border-color: #FFA040; }
+  .tag-etc        { background: #F5F5F5; border-color: #BDBDBD; }
+
+  .card-tag {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #555;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .card-tag-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .card-format-badge {
+    font-size: 7px;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .fmt-short { background: #FE2C55; }
+  .fmt-sound { background: #00A8B5; }
+  .fmt-vlog  { background: #6D4C41; }
+  .fmt-etc   { background: #9E9E9E; }
+
+  .card-memo-dot {
+    font-size: 9px;
+    opacity: 0.7;
+    cursor: default;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #111;
+    outline: none;
+    border-radius: 3px;
+    padding: 2px 3px;
+    margin: 0 -3px 2px;
+    cursor: text;
+    word-break: break-word;
+    min-height: 16px;
+  }
+  .card-title:focus { background: rgba(255,255,255,0.8); }
+  .card-title:empty::before { content: attr(data-placeholder); color: #bbb; font-weight: 400; }
+
+  .card-divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin: 3px 0;
+  }
+
+  .card-hook {
+    font-size: 9px;
+    color: #555;
+    line-height: 1.45;
+    outline: none;
+    border-radius: 3px;
+    padding: 2px 3px;
+    margin: 0 -3px;
+    cursor: text;
+    word-break: break-word;
+    font-style: italic;
+    min-height: 14px;
+  }
+  .card-hook:focus { background: rgba(255,255,255,0.8); }
+  .card-hook:empty::before { content: attr(data-placeholder); color: #bbb; font-style: normal; }
+
+  /* ── HASHTAG / CHALLENGE ── */
+  .card-hashtag {
+    font-size: 8px;
+    font-weight: 700;
+    color: #0F7B85;
+    line-height: 1.4;
+    margin-top: 4px;
+    word-break: break-word;
+    display: none;
+  }
+  .card-hashtag.show { display: block; }
+
+  .card-actions {
+    display: flex;
+    gap: 3px;
+    margin-top: 5px;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .content-card:hover .card-actions { opacity: 1; }
+
+  .card-btn {
+    font-size: 8px;
+    padding: 2px 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.85);
+    cursor: pointer;
+    color: #555;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .card-btn:hover { background: #fff; color: #111; }
+  .card-btn.delete:hover { color: #E33; }
+
+  .memo-box { display: none; margin-top: 5px; }
+  .memo-box.open { display: block; }
+
+  .memo-input {
+    width: 100%;
+    font-size: 9px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    padding: 4px 6px;
+    background: rgba(255,255,255,0.8);
+    font-family: inherit;
+    resize: none;
+    color: #444;
+    line-height: 1.5;
+    outline: none;
+    min-height: 38px;
+  }
+  .memo-input:focus { border-color: #FE2C55; background: #fff; }
+  .memo-input::placeholder { color: #ccc; }
+
+  /* ── MENTIONS / SLACK ── */
+  .mention-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .mention-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 8px;
+    font-weight: 700;
+    background: #ECE9FE;
+    color: #5B3DF5;
+    border-radius: 10px;
+    padding: 2px 6px;
+  }
+  .mention-chip .x { cursor: pointer; opacity: 0.6; }
+  .mention-chip .x:hover { opacity: 1; }
+  .btn-mention-add {
+    font-size: 8px;
+    font-weight: 700;
+    border: 1px dashed #ccc;
+    background: none;
+    border-radius: 10px;
+    padding: 2px 7px;
+    cursor: pointer;
+    color: #999;
+    font-family: inherit;
+  }
+  .btn-mention-add:hover { border-color: #5B3DF5; color: #5B3DF5; }
+  .mention-picker {
+    position: absolute;
+    z-index: 500;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 140px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .mention-picker-item {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #444;
+  }
+  .mention-picker-item:hover { background: #f2f2f8; }
+  .mention-picker-item.selected { color: #5B3DF5; }
+  .btn-send-slack {
+    display: block;
+    font-size: 8px;
+    font-weight: 700;
+    background: #4A154B;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 6px;
+  }
+  .btn-send-slack:hover { background: #611f64; }
+  .btn-send-slack:disabled { background: #ccc; cursor: not-allowed; }
+  .slack-sent-note {
+    font-size: 8px;
+    color: #4CAF50;
+    margin-top: 4px;
+  }
+
+  .user-select {
+    font-size: 10px;
+    font-weight: 700;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-family: inherit;
+    color: #111;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  /* ── LOADING ── */
+  #loading-overlay {
+    position: fixed; inset: 0;
+    background: rgba(255,255,255,0.92);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  #loading-overlay.hidden { display: none; }
+  .loader {
+    width: 30px; height: 30px;
+    border: 3px solid #eee;
+    border-top-color: #FE2C55;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-msg { font-size: 12px; color: #999; }
+
+  /* ── SETUP BANNER (Bin 미발급 상태) ── */
+  #setup-banner {
+    display: none;
+    background: #FFF8E1;
+    border-bottom: 1.5px solid #FFD600;
+    padding: 10px 28px;
+    font-size: 11px;
+    color: #7a5c00;
+    line-height: 1.6;
+  }
+  #setup-banner.show { display: block; }
+  #setup-banner code {
+    background: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    width: 520px;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+  }
+
+  .modal h2 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 14px;
+  }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field.full { grid-column: 1 / -1; }
+
+  .modal-field label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: 4px;
+  }
+
+  .modal-field input,
+  .modal-field textarea,
+  .modal-field select {
+    width: 100%;
+    font-size: 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: inherit;
+    color: #111;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fff;
+  }
+  .modal-field input:focus,
+  .modal-field textarea:focus,
+  .modal-field select:focus { border-color: #FE2C55; }
+  .modal-field textarea { resize: vertical; min-height: 64px; }
+
+  .modal-actions {
+    display: flex; gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .btn-primary {
+    background: #111; color: #fff; border: none;
+    border-radius: 6px; padding: 8px 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #333; }
+
+  .btn-secondary {
+    background: #fff; color: #555;
+    border: 1.5px solid #ddd; border-radius: 6px;
+    padding: 8px 16px; font-size: 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { border-color: #aaa; }
+
+  .sidebar-empty {
+    text-align: center; padding: 16px;
+    font-size: 10px; color: #ccc;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loader"></div>
+  <div id="loading-msg">데이터 불러오는 중...</div>
+</div>
+
+<header>
+  <h1>EQQUALBERRY <span class="tt-badge">TIKTOK</span> 2026 CONTENT CALENDAR</h1>
+  <div class="header-right">
+    <span class="account-pill">🌍 Global</span>
+    <div class="format-legend">
+      <button class="filter-btn active-all" data-filter="all" onclick="filterFormat('all', this)">전체</button>
+      <button class="filter-btn" data-filter="숏폼" onclick="filterFormat('숏폼', this)">숏폼</button>
+      <button class="filter-btn" data-filter="사운드밈" onclick="filterFormat('사운드밈', this)">사운드밈</button>
+      <button class="filter-btn" data-filter="브이로그" onclick="filterFormat('브이로그', this)">브이로그</button>
+      <button class="filter-btn" data-filter="기타" onclick="filterFormat('기타', this)">기타</button>
+    </div>
+    <nav class="month-nav">
+      <a href="#m08">8월</a>
+      <a href="#m09">9월</a>
+      <a href="#m10">10월</a>
+      <a href="#m11">11월</a>
+      <a href="#m12">12월</a>
+    </nav>
+    <select class="user-select" id="current-user-select" onchange="setCurrentUser(this.value)">
+      <option value="">나는 누구?</option>
+    </select>
+    <button class="btn-export" onclick="exportToXLSX()">📊 시트 다운로드</button>
+    <a href="https://chudadawhy.github.io/design/2026_content_calendar.html" target="_blank" rel="noopener" class="insta-link">📸 인스타 캘린더</a>
+    <a href="https://www.figma.com/design/18eoqhmcgzelWwClNpVkz4/-%EC%9D%B4%ED%80%84%EB%B2%A0%EB%A6%AC-US-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EA%B5%AC%EC%84%B1%EC%95%88?node-id=4479-27&t=9IuO1hSFg5HpYsMa-1" target="_blank" rel="noopener" class="figma-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+        <path d="M8 24c2.208 0 4-1.792 4-4v-4H8c-2.208 0-4 1.792-4 4s1.792 4 4 4z" fill="#0ACF83"/>
+        <path d="M4 12c0-2.208 1.792-4 4-4h4v8H8c-2.208 0-4-1.792-4-4z" fill="#A259FF"/>
+        <path d="M4 4c0-2.208 1.792-4 4-4h4v8H8C5.792 8 4 6.208 4 4z" fill="#F24E1E"/>
+        <path d="M12 0h4c2.208 0 4 1.792 4 4s-1.792 4-4 4h-4V0z" fill="#FF7262"/>
+        <path d="M20 12c0 2.208-1.792 4-4 4s-4-1.792-4-4 1.792-4 4-4 4 1.792 4 4z" fill="#1ABCFE"/>
+      </svg>
+      디자인 시안
+    </a>
+    <span id="save-status">—</span>
+    <button class="btn-save-now" id="btn-save-now" onclick="saveNow()">저장하기</button>
+  </div>
+</header>
+
+<div id="setup-banner">
+  ⚠️ <strong>JSONBin 미연결 상태</strong> — 지금은 편집한 내용이 저장되지 않고, 새로고침하면 사라집니다.
+  <code>jsonbin_setup.html</code> 페이지에서 틱톡 전용 Bin을 발급한 뒤 이 파일의 <code>BIN_ID</code>에 넣어야 정상 작동합니다.
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <span class="sidebar-label">📦 미배정 콘텐츠</span>
+      <button class="btn-new-card" onclick="openNewModal('unscheduled')">+ 새 카드</button>
+    </div>
+    <div class="sidebar-list" id="sidebar-pool" data-date="unscheduled"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="calendar-main" id="calendar-main"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-heading">콘텐츠 편집</h2>
+    <div class="modal-grid">
+      <div class="modal-field">
+        <label>포맷</label>
+        <select id="modal-format">
+          <option value="숏폼">숏폼</option>
+          <option value="사운드밈">사운드밈</option>
+          <option value="브이로그">브이로그</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>라인 태그</label>
+        <select id="modal-tag">
+          <option value="tag-vita">비타라인</option>
+          <option value="tag-hyaltoin">히알토인</option>
+          <option value="tag-aloe">알로에</option>
+          <option value="tag-bakuchiol">바쿠치올</option>
+          <option value="tag-nad">나드</option>
+          <option value="tag-branding">브랜딩 & 캠페인</option>
+          <option value="tag-mixed">라인혼합</option>
+          <option value="tag-etc">기타</option>
+        </select>
+      </div>
+      <div class="modal-field full">
+        <label>콘텐츠 제목</label>
+        <input type="text" id="modal-title" placeholder="콘텐츠 제목" />
+      </div>
+      <div class="modal-field full">
+        <label>훅 / 핵심 메시지 (첫 1~3초)</label>
+        <textarea id="modal-hook" placeholder="스크롤을 멈추게 하는 첫 1~3초 훅"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>해시태그 · 챌린지</label>
+        <textarea id="modal-hashtag" placeholder="#equalberry #skinflooding / 참여 챌린지명" style="min-height:48px;"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>비주얼 방향</label>
+        <textarea id="modal-visual" placeholder="연출 방향, 컬러, 앵글, 컷 구성 등"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>캡션 초안</label>
+        <textarea id="modal-caption" placeholder="틱톡 캡션 초안" style="min-height:80px;"></textarea>
+      </div>
+      <div class="modal-field full">
+        <label>메모 / 진행 상황</label>
+        <textarea id="modal-memo" placeholder="촬영 상태, 수정 사항, 진행 노트 등"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">취소</button>
+      <button class="btn-primary" onclick="saveModal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// ⚠️ 인스타그램 캘린더와 반드시 다른 Bin을 사용해야 함 (데이터 분리)
+//    인스타 Bin: 6a41dbb2da38895dfe0dc723  ← 절대 여기 쓰지 말 것
+const BIN_ID  = '__TIKTOK_BIN_ID__';
+const API_KEY = '$2a$10$.7SBk15RcVNdjKoMAr4XXe7DHPvfTxh/fzxLY4Z1QnuEesVacuDXi';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const HEADERS_READ  = { 'X-Master-Key': API_KEY };
+const HEADERS_WRITE = { 'X-Master-Key': API_KEY, 'Content-Type': 'application/json' };
+const BIN_READY = !BIN_ID.startsWith('__');
+
+// ─── SLACK ────────────────────────────────────────────────────────────────────
+// Slack Webhook URL은 Cloudflare Worker(eqb-slack-relay)에 시크릿으로 보관되어 있고,
+// 이 앱은 그 중계 Worker만 호출한다 (원본 웹훅 URL은 코드에 노출되지 않음).
+const SLACK_RELAY_URL = 'https://eqb-slack-relay.chudadawhy.workers.dev';
+const CALENDAR_URL = 'https://chudadawhy.github.io/design/2026_tiktok_content_calendar.html';
+
+// #04-뷰티-이퀄베리-온드기획 채널 멤버 (2026-07-30 기준 17명)
+const TEAM_MEMBERS = [
+  { id: 'U08F2MVFSR5', name: '서벼리' },
+  { id: 'U08PLUJ54E9', name: '이연주' },
+  { id: 'U096J38CYQK', name: '김엠마누엘' },
+  { id: 'U09CQCQPW3E', name: '김호정' },
+  { id: 'U09G01VJJJH', name: '김희진' },
+  { id: 'U09J93078A2', name: '홍효정' },
+  { id: 'U09K5DJTLUQ', name: '신혜리' },
+  { id: 'U0A0AA74350', name: '최사라' },
+  { id: 'U0A5R60095J', name: '박선인' },
+  { id: 'U0AFT3G33GD', name: '이예린' },
+  { id: 'U0AHEJN1DB8', name: '이수현' },
+  { id: 'U0AHL8SMZ9A', name: '김진송' },
+  { id: 'U0AJTQTH9N0', name: '이승은' },
+  { id: 'U0B6Q6CNG75', name: '이소현' },
+  { id: 'U0B89FF082X', name: '윤소연' },
+  { id: 'U0B8FSGFRPU', name: '권수현' },
+  { id: 'U0B9YN2B0DT', name: '김승지' },
+];
+
+// ─── MONTH CONFIG (2026년 8월~12월) ──────────────────────────────────────────
+// startDay: 해당 월 1일의 요일 (일요일=0)
+const MONTHS = [
+  { key: '08', label: '8월',  eng: 'August',    startDay: 6, days: 31 },
+  { key: '09', label: '9월',  eng: 'September', startDay: 2, days: 30 },
+  { key: '10', label: '10월', eng: 'October',   startDay: 4, days: 31 },
+  { key: '11', label: '11월', eng: 'November',  startDay: 0, days: 30 },
+  { key: '12', label: '12월', eng: 'December',  startDay: 2, days: 31 },
+];
+
+const TAG_LABELS = {
+  'tag-vita':'비타라인',
+  'tag-hyaltoin':'히알토인',
+  'tag-aloe':'알로에',
+  'tag-bakuchiol':'바쿠치올',
+  'tag-nad':'나드',
+  'tag-branding':'브랜딩 & 캠페인',
+  'tag-mixed':'라인혼합',
+  'tag-etc':'기타'
+};
+
+const FORMATS = ['숏폼', '사운드밈', '브이로그', '기타'];
+
+// ─── DEFAULT DATA ─────────────────────────────────────────────────────────────
+const DEFAULT_CARDS = [
+  { id:'t01', tag:'tag-hyaltoin', format:'숏폼', tagLabel:'히알토인',
+    title:'젤이 에센스로 바뀌는 3초',
+    hook:'손에 올리면 젤. 피부에 닿으면 에센스. 3초만 봐.',
+    hashtag:'#equalberry #hyaltoin #texturechange #skincaretexture',
+    visual:'하얀 배경. 손등 매크로 클로즈업. 젤이 퍼지며 투명해지는 텍스처 변화 원컷.',
+    caption:'Hyaltoin Toner — 수분의 첫 번째 파동.\n\n#equalberry #hyaltoin #kbeauty',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t02', tag:'tag-hyaltoin', format:'숏폼', tagLabel:'히알토인',
+    title:'히알루론산 1종 vs 11종',
+    hook:'왜 11가지여야 하냐고? 피부 깊이마다 분자 크기가 달라.',
+    hashtag:'#equalberry #hyaluronicacid #ingredientcheck',
+    visual:'세럼 병 + 에센스 텍스처 매크로. 분자 크기 비교 그래픽 오버레이.',
+    caption:'Good question: 히알루론산 하나로 충분할까?\n\n#equalberry #hyaltoinserum',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t03', tag:'tag-hyaltoin', format:'사운드밈', tagLabel:'히알토인',
+    title:'Skin Flooding 3-Step 사운드밈',
+    hook:'토너 → 세럼 → 크림. 순서 틀리면 다 새어나가.',
+    visual:'트렌드 사운드 비트에 맞춰 3병을 순서대로 프레임인. 컷 전환 리듬 중심.',
+    hashtag:'#skinflooding #equalberry #skincareroutine',
+    caption:'The order matters.\n\n#skinflooding #equalberry',
+    memo:'사용할 트렌드 사운드 확정 필요', date:'unscheduled', account:'global' },
+  { id:'t04', tag:'tag-aloe', format:'숏폼', tagLabel:'알로에',
+    title:'쿨링이 아니다 — 회복이다',
+    hook:'피부가 달아오르는 건 열 때문이 아니야. 세포가 손상된 거야.',
+    hashtag:'#equalberry #pdrn #aloe #skinbarrier',
+    visual:'하얀 배경. 알로에 PDRN 민트 컬러 제품. 텍스처 클로즈업.',
+    caption:'Good question: 쿨링 제품이 충분한가?\n\n#equalberry #aloepdrn',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t05', tag:'tag-aloe', format:'숏폼', tagLabel:'알로에',
+    title:'PDRN이 뭔지 물어봤어?',
+    hook:'PDRN. 들어봤는데 모르는 성분. 30초에 정리해줄게.',
+    hashtag:'#pdrn #ingredienttalk #equalberry',
+    visual:'성분 클로즈업 컷 + 짧은 텍스트 오버레이. 오브제로서의 성분 연출.',
+    caption:'PDRN — Polynucleotide.\n\n#equalberry #pdrn',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t06', tag:'tag-mixed', format:'브이로그', tagLabel:'라인혼합',
+    title:'책상 위 3분 루틴 — 일상 틈새 브이로그',
+    hook:'완벽한 욕실 없어도 돼. 책상 위에서 3분.',
+    hashtag:'#equalberry #deskskincare #dailyroutine',
+    visual:'일상의 틈새. 책상 위, 이동 중 잠깐의 루틴. 완벽하지 않은 공간.',
+    caption:'She already knows.\n\n#equalberry #dailyroutine',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t07', tag:'tag-mixed', format:'숏폼', tagLabel:'라인혼합',
+    title:'순서가 틀렸을 수도 있어 — 알로에 먼저',
+    hook:'수분 세럼부터 쓰는 사람에게. 순서가 틀렸을 수도 있어.',
+    hashtag:'#equalberry #routineorder #skincaretips',
+    visual:'알로에 PDRN + 히알토인 두 제품. 좌→우 순서 강조 컷.',
+    caption:'먼저 회복하고, 그 다음 채우세요.\n\n#equalberry',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t08', tag:'tag-branding', format:'사운드밈', tagLabel:'브랜딩 & 캠페인',
+    title:'Good question. — 캠페인 사운드밈',
+    hook:'질문이 많은 사람의 스킨케어.',
+    hashtag:'#goodquestion #equalberry #ourformula',
+    visual:'화이트 배경. 타이포그래피 중심. 컬러 포인트 제품 하나.',
+    caption:'Good question. Our formula shows up for you.\n\n#equalberry #goodquestion',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t09', tag:'tag-branding', format:'기타', tagLabel:'브랜딩 & 캠페인',
+    title:'브랜드 티저 — 15초 컷',
+    hook:'설명이 필요 없는 사람. 그녀는 이미 알고 있다.',
+    hashtag:'#equalberry #brandfilm',
+    visual:'짧은 컷 몽타주. 성분이 오브제가 되는 연출.',
+    caption:'She already knows.\n\n#equalberry',
+    memo:'', date:'unscheduled', account:'global' },
+  { id:'t10', tag:'tag-vita', format:'숏폼', tagLabel:'비타라인',
+    title:'아침 세안 후 첫 한 방울',
+    hook:'아침에 딱 한 단계만 추가한다면, 이거.',
+    hashtag:'#equalberry #vitaminc #morningroutine',
+    visual:'아침 창가 자연광. 스포이드에서 떨어지는 한 방울 클로즈업.',
+    caption:'Morning, one drop.\n\n#equalberry #vitaline',
+    memo:'', date:'unscheduled', account:'global' }
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let cards = [];
+let dragCardId = null;
+let editingCardId = null;
+let saveTimer = null;
+let activeFormatFilter = 'all';
+
+// ─── JSONBIN ──────────────────────────────────────────────────────────────────
+async function loadFromBin() {
+  if (!BIN_READY) {
+    document.getElementById('setup-banner').classList.add('show');
+    return DEFAULT_CARDS;
+  }
+  try {
+    const res = await fetch(`${BIN_URL}/latest`, { headers: HEADERS_READ });
+    if (!res.ok) throw new Error(res.status);
+    const json = await res.json();
+    const data = json.record;
+    if (Array.isArray(data)) return data.length ? data : DEFAULT_CARDS;
+    if (data && Array.isArray(data.cards)) return data.cards.length ? data.cards : DEFAULT_CARDS;
+    return DEFAULT_CARDS;
+  } catch (e) {
+    console.error('Load error:', e);
+    return DEFAULT_CARDS;
+  }
+}
+
+async function saveToBin() {
+  if (!BIN_READY) { setStatus('error'); return; }
+  setStatus('saving');
+  document.getElementById('btn-save-now').disabled = true;
+  try {
+    const res = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: HEADERS_WRITE,
+      body: JSON.stringify({ cards })
+    });
+    if (!res.ok) throw new Error(res.status);
+    setStatus('saved');
+  } catch (e) {
+    console.error('Save error:', e);
+    setStatus('error');
+  } finally {
+    document.getElementById('btn-save-now').disabled = false;
+  }
+}
+
+function setStatus(s) {
+  const el = document.getElementById('save-status');
+  el.className = s;
+  if (s === 'saving') el.textContent = '저장 중...';
+  else if (s === 'saved') el.textContent = '✓ 저장됨';
+  else if (s === 'error') el.textContent = '⚠ 저장 실패';
+  else el.textContent = '—';
+}
+
+function markDirty() {
+  setStatus('');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToBin, 2500);
+}
+
+function saveNow() { clearTimeout(saveTimer); saveToBin(); }
+
+// ─── CURRENT USER (for Slack attribution) ─────────────────────────────────────
+function populateUserSelect() {
+  const sel = document.getElementById('current-user-select');
+  TEAM_MEMBERS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.name;
+    sel.appendChild(opt);
+  });
+  const saved = localStorage.getItem('eqb_current_user');
+  if (saved) sel.value = saved;
+}
+
+function setCurrentUser(id) {
+  localStorage.setItem('eqb_current_user', id);
+}
+
+function currentUserName() {
+  const id = localStorage.getItem('eqb_current_user') || '';
+  const m = TEAM_MEMBERS.find(t => t.id === id);
+  return m ? m.name : '팀원';
+}
+
+// ─── MENTIONS ─────────────────────────────────────────────────────────────────
+let openMentionPickerEl = null;
+
+function closeMentionPicker() {
+  if (openMentionPickerEl) { openMentionPickerEl.remove(); openMentionPickerEl = null; }
+  document.removeEventListener('click', closeMentionPicker);
+}
+
+function renderMentions(card, container) {
+  container.innerHTML = '';
+  (card.mentions || []).forEach(uid => {
+    const m = TEAM_MEMBERS.find(t => t.id === uid);
+    if (!m) return;
+    const chip = document.createElement('span');
+    chip.className = 'mention-chip';
+    chip.innerHTML = `@${escHtml(m.name)} <span class="x">✕</span>`;
+    chip.querySelector('.x').addEventListener('mousedown', e => e.stopPropagation());
+    chip.querySelector('.x').addEventListener('click', e => {
+      e.stopPropagation();
+      card.mentions = (card.mentions || []).filter(id => id !== uid);
+      markDirty();
+      renderMentions(card, container);
+    });
+    container.appendChild(chip);
+  });
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn-mention-add';
+  addBtn.textContent = '+ 태그';
+  addBtn.addEventListener('mousedown', e => e.stopPropagation());
+  addBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    openMentionPicker(card, container, addBtn);
+  });
+  container.appendChild(addBtn);
+}
+
+function openMentionPicker(card, container, anchorBtn) {
+  closeMentionPicker();
+  const picker = document.createElement('div');
+  picker.className = 'mention-picker';
+  TEAM_MEMBERS.forEach(m => {
+    const active = (card.mentions || []).includes(m.id);
+    const item = document.createElement('div');
+    item.className = 'mention-picker-item' + (active ? ' selected' : '');
+    item.textContent = (active ? '✓ ' : '') + m.name;
+    item.addEventListener('mousedown', e => e.stopPropagation());
+    item.addEventListener('click', e => {
+      e.stopPropagation();
+      card.mentions = card.mentions || [];
+      if (card.mentions.includes(m.id)) {
+        card.mentions = card.mentions.filter(id => id !== m.id);
+      } else {
+        card.mentions.push(m.id);
+      }
+      markDirty();
+      renderMentions(card, container);
+      closeMentionPicker();
+    });
+    picker.appendChild(item);
+  });
+  document.body.appendChild(picker);
+  const rect = anchorBtn.getBoundingClientRect();
+  picker.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+  picker.style.left = (rect.left + window.scrollX) + 'px';
+  openMentionPickerEl = picker;
+  setTimeout(() => document.addEventListener('click', closeMentionPicker), 0);
+}
+
+// ─── SLACK SEND ───────────────────────────────────────────────────────────────
+async function sendSlackMention(card, btn, noteEl) {
+  const mentions = card.mentions || [];
+  if (!mentions.length) { alert('태그할 사람을 먼저 선택해주세요.'); return; }
+  if (!card.memo || !card.memo.trim()) { alert('먼저 메모를 입력해주세요.'); return; }
+
+  const uname = currentUserName();
+  const mentionText = mentions.map(id => `<@${id}>`).join(' ');
+  const dateLabel = card.date === 'unscheduled' ? '미배정' : card.date;
+
+  const text = `🎵 *${uname}*님이 EQQUALBERRY *틱톡* 콘텐츠 캘린더에서 ${mentionText} 님을 태그했습니다.\n\n*카드:* ${card.title || '(제목 없음)'}  \`${dateLabel}\`  _${card.format || ''}_\n*메모:* ${card.memo}\n\n바로가기: ${CALENDAR_URL}`;
+
+  btn.disabled = true;
+  btn.textContent = '전송 중...';
+  try {
+    const res = await fetch(SLACK_RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) throw new Error('relay status ' + res.status);
+    noteEl.style.color = '#4CAF50';
+    noteEl.textContent = `✓ ${new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}에 전송됨`;
+    noteEl.style.display = 'block';
+  } catch (e) {
+    console.error('Slack send error:', e);
+    noteEl.style.color = '#E33';
+    noteEl.textContent = '⚠ 전송 실패';
+    noteEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📨 태그 알림 보내기';
+  }
+}
+
+// ─── BUILD CALENDAR ───────────────────────────────────────────────────────────
+function buildCalendar() {
+  const main = document.getElementById('calendar-main');
+  main.innerHTML = '';
+
+  MONTHS.forEach(month => {
+    const section = document.createElement('div');
+    section.className = 'month-section';
+    section.id = `m${month.key}`;
+
+    const header = document.createElement('div');
+    header.className = 'month-header';
+    header.innerHTML = `${month.label} <span>${month.eng} 2026</span><span class="month-count" data-month="${month.key}"></span>`;
+    section.appendChild(header);
+
+    const weekHeaders = document.createElement('div');
+    weekHeaders.className = 'week-headers';
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const dh = document.createElement('div');
+      dh.className = 'day-header';
+      dh.textContent = d;
+      weekHeaders.appendChild(dh);
+    });
+    section.appendChild(weekHeaders);
+
+    const grid = document.createElement('div');
+    grid.className = 'month-grid';
+    const totalCells = month.startDay + month.days;
+    const weeks = Math.ceil(totalCells / 7);
+    let dayNum = 1;
+
+    for (let w = 0; w < weeks; w++) {
+      const row = document.createElement('div');
+      row.className = 'week-row';
+      for (let d = 0; d < 7; d++) {
+        const cell = document.createElement('div');
+        const idx = w * 7 + d;
+        if (idx < month.startDay || dayNum > month.days) {
+          cell.className = 'day-cell empty';
+        } else {
+          const date = `2026-${month.key}-${String(dayNum).padStart(2,'0')}`;
+          cell.className = 'day-cell';
+          cell.dataset.date = date;
+          const numEl = document.createElement('span');
+          numEl.className = 'day-num';
+          numEl.textContent = dayNum;
+          cell.appendChild(numEl);
+          const addBtn = document.createElement('button');
+          addBtn.className = 'btn-add-inline';
+          addBtn.textContent = '+';
+          addBtn.addEventListener('click', () => openNewModal(date));
+          cell.appendChild(addBtn);
+          setupDropTarget(cell, date);
+          dayNum++;
+        }
+        row.appendChild(cell);
+      }
+      grid.appendChild(row);
+    }
+
+    section.appendChild(grid);
+    main.appendChild(section);
+  });
+
+  // Sidebar drop
+  const pool = document.getElementById('sidebar-pool');
+  pool.addEventListener('dragover', e => { e.preventDefault(); pool.style.background = '#fff2f5'; });
+  pool.addEventListener('dragleave', () => { pool.style.background = ''; });
+  pool.addEventListener('drop', e => {
+    e.preventDefault(); pool.style.background = '';
+    if (dragCardId) {
+      const card = cards.find(c => c.id === dragCardId);
+      if (card) { card.date = 'unscheduled'; markDirty(); renderAll(); }
+    }
+  });
+}
+
+function setupDropTarget(el, date) {
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', e => { if (!el.contains(e.relatedTarget)) el.classList.remove('drag-over'); });
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('drag-over');
+    if (dragCardId) {
+      const card = cards.find(c => c.id === dragCardId);
+      if (card) { card.date = date; markDirty(); renderAll(); }
+    }
+  });
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderAll() {
+  document.querySelectorAll('.day-cell:not(.empty) .content-card').forEach(e => e.remove());
+  document.getElementById('sidebar-pool').innerHTML = '';
+
+  cards.forEach(card => {
+    const el = createCardEl(card);
+    if (card.date === 'unscheduled') {
+      document.getElementById('sidebar-pool').appendChild(el);
+    } else {
+      const cell = document.querySelector(`.day-cell[data-date="${card.date}"]`);
+      if (cell) {
+        cell.insertBefore(el, cell.querySelector('.btn-add-inline'));
+      } else {
+        card.date = 'unscheduled';
+        document.getElementById('sidebar-pool').appendChild(el);
+      }
+    }
+  });
+
+  if (!document.getElementById('sidebar-pool').children.length) {
+    const empty = document.createElement('div');
+    empty.className = 'sidebar-empty';
+    empty.textContent = '모든 콘텐츠가 배정됨';
+    document.getElementById('sidebar-pool').appendChild(empty);
+  }
+
+  applyFormatFilter();
+  updateMonthCounts();
+  updateMonthNav();
+}
+
+function createCardEl(card) {
+  const el = document.createElement('div');
+  const fmt = card.format || '기타';
+  el.className = `content-card ${card.tag} account-global`;
+  el.draggable = true;
+  el.dataset.id = card.id;
+  el.dataset.format = fmt;
+
+  el.innerHTML = `
+    <div class="card-tag">
+      ${escHtml(card.tagLabel)}
+      <span class="card-format-badge fmt-${FILTER_CLASS[fmt] || 'etc'}">${escHtml(fmt)}</span>
+      <span class="card-tag-right">
+        <span class="card-memo-dot" title="메모 있음" style="display:${card.memo ? 'inline' : 'none'}">📝</span>
+      </span>
+    </div>
+    <div class="card-title" contenteditable="true" data-placeholder="제목">${escHtml(card.title)}</div>
+    <hr class="card-divider">
+    <div class="card-hook" contenteditable="true" data-placeholder="훅 / 핵심 메시지">${escHtml(card.hook)}</div>
+    <div class="card-hashtag ${card.hashtag ? 'show' : ''}">${escHtml(card.hashtag || '')}</div>
+    <div class="card-actions">
+      <button class="card-btn" data-action="edit">✏️ 편집</button>
+      <button class="card-btn" data-action="copy">⧉ 복사</button>
+      <button class="card-btn" data-action="memo">📝 메모</button>
+      <button class="card-btn delete" data-action="delete">✕</button>
+    </div>
+    <div class="memo-box">
+      <textarea class="memo-input" placeholder="메모, 촬영 상태, 진행 노트...">${escHtml(card.memo)}</textarea>
+      <div class="mention-row"></div>
+      <button class="btn-send-slack" data-action="send-slack">📨 태그 알림 보내기</button>
+      <div class="slack-sent-note" style="display:none;"></div>
+    </div>
+  `;
+
+  const titleDiv = el.querySelector('.card-title');
+  titleDiv.addEventListener('mousedown', e => e.stopPropagation());
+  titleDiv.addEventListener('dragstart', e => e.preventDefault());
+  titleDiv.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) { c.title = titleDiv.innerText.trim(); markDirty(); }
+  });
+
+  const hookDiv = el.querySelector('.card-hook');
+  hookDiv.addEventListener('mousedown', e => e.stopPropagation());
+  hookDiv.addEventListener('dragstart', e => e.preventDefault());
+  hookDiv.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) { c.hook = hookDiv.innerText.trim(); markDirty(); }
+  });
+
+  const memoInput = el.querySelector('.memo-input');
+  memoInput.addEventListener('mousedown', e => e.stopPropagation());
+  memoInput.addEventListener('input', () => autoResize(memoInput));
+  memoInput.addEventListener('blur', () => {
+    const c = cards.find(c => c.id === card.id);
+    if (c) {
+      c.memo = memoInput.value;
+      el.querySelector('.card-memo-dot').style.display = c.memo ? 'inline' : 'none';
+      markDirty();
+    }
+  });
+
+  const mentionRow = el.querySelector('.mention-row');
+  renderMentions(card, mentionRow);
+
+  const sendSlackBtn = el.querySelector('[data-action="send-slack"]');
+  const sentNote = el.querySelector('.slack-sent-note');
+  sendSlackBtn.addEventListener('mousedown', e => e.stopPropagation());
+  sendSlackBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    sendSlackMention(card, sendSlackBtn, sentNote);
+  });
+
+  el.querySelector('[data-action="edit"]').addEventListener('click', e => { e.stopPropagation(); openEditModal(card.id); });
+
+  el.querySelector('[data-action="copy"]').addEventListener('click', e => {
+    e.stopPropagation();
+    const src = cards.find(c => c.id === card.id);
+    if (!src) return;
+    const copy = { ...JSON.parse(JSON.stringify(src)), id: 't' + Date.now(), date: 'unscheduled', title: src.title + ' (복사)' };
+    const idx = cards.findIndex(c => c.id === card.id);
+    cards.splice(idx + 1, 0, copy);
+    markDirty(); renderAll();
+  });
+
+  el.querySelector('[data-action="memo"]').addEventListener('click', e => {
+    e.stopPropagation();
+    const box = el.querySelector('.memo-box');
+    box.classList.toggle('open');
+    if (box.classList.contains('open')) memoInput.focus();
+  });
+
+  el.querySelector('[data-action="delete"]').addEventListener('click', e => {
+    e.stopPropagation();
+    if (confirm(`"${card.title}" 삭제하시겠습니까?`)) {
+      cards = cards.filter(c => c.id !== card.id);
+      markDirty(); renderAll();
+    }
+  });
+
+  el.addEventListener('dragstart', e => { dragCardId = card.id; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+  el.addEventListener('dragend', () => { dragCardId = null; el.classList.remove('dragging'); });
+
+  return el;
+}
+
+// ─── MONTH COUNTS ─────────────────────────────────────────────────────────────
+function updateMonthCounts() {
+  MONTHS.forEach(month => {
+    const prefix = `2026-${month.key}-`;
+    const n = cards.filter(c => (c.date || '').startsWith(prefix)).length;
+    const el = document.querySelector(`.month-count[data-month="${month.key}"]`);
+    if (el) el.textContent = n ? `${n}건` : '';
+  });
+}
+
+// ─── MONTH NAV HIGHLIGHT ──────────────────────────────────────────────────────
+function updateMonthNav() {
+  const main = document.getElementById('calendar-main');
+  const sections = document.querySelectorAll('.month-section');
+  const navLinks = document.querySelectorAll('.month-nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { root: main, threshold: 0.3 });
+
+  sections.forEach(s => observer.observe(s));
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────────
+function openEditModal(cardId) {
+  editingCardId = cardId;
+  const card = cards.find(c => c.id === cardId);
+  if (!card) return;
+  document.getElementById('modal-heading').textContent = '콘텐츠 편집';
+  document.getElementById('modal-format').value = FORMATS.includes(card.format) ? card.format : '기타';
+  document.getElementById('modal-tag').value = card.tag || 'tag-etc';
+  document.getElementById('modal-title').value = card.title || '';
+  document.getElementById('modal-hook').value = card.hook || '';
+  document.getElementById('modal-hashtag').value = card.hashtag || '';
+  document.getElementById('modal-visual').value = card.visual || '';
+  document.getElementById('modal-caption').value = card.caption || '';
+  document.getElementById('modal-memo').value = card.memo || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openNewModal(date) {
+  editingCardId = '__new__';
+  document.getElementById('modal-heading').textContent = '새 콘텐츠 추가';
+  ['modal-title','modal-hook','modal-hashtag','modal-visual','modal-caption','modal-memo'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('modal-format').value = '숏폼';
+  document.getElementById('modal-tag').value = 'tag-branding';
+  document.getElementById('modal-overlay').dataset.newDate = date;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingCardId = null;
+}
+
+function saveModal() {
+  const tag = document.getElementById('modal-tag').value;
+  const data = {
+    account: 'global',
+    tag, tagLabel: TAG_LABELS[tag],
+    format: document.getElementById('modal-format').value,
+    title: document.getElementById('modal-title').value,
+    hook: document.getElementById('modal-hook').value,
+    hashtag: document.getElementById('modal-hashtag').value,
+    visual: document.getElementById('modal-visual').value,
+    caption: document.getElementById('modal-caption').value,
+    memo: document.getElementById('modal-memo').value,
+  };
+  if (editingCardId === '__new__') {
+    const date = document.getElementById('modal-overlay').dataset.newDate || 'unscheduled';
+    cards.push({ id: 't' + Date.now(), date, ...data });
+  } else {
+    const card = cards.find(c => c.id === editingCardId);
+    if (card) Object.assign(card, data);
+  }
+  markDirty(); renderAll(); closeModal();
+}
+
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── EXPORT ───────────────────────────────────────────────────────────────────
+function exportToXLSX() {
+  const sorted = [...cards].sort((a, b) => {
+    if (a.date === 'unscheduled') return 1;
+    if (b.date === 'unscheduled') return -1;
+    return a.date.localeCompare(b.date);
+  });
+
+  const rows = sorted.map(c => ({
+    '날짜':       c.date === 'unscheduled' ? '미배정' : c.date,
+    '계정':       'Global',
+    '라인 태그':  c.tagLabel || '',
+    '포맷':       c.format || '',
+    '콘텐츠 제목': c.title || '',
+    '훅 / 핵심 메시지': c.hook || '',
+    '해시태그 · 챌린지': c.hashtag || '',
+    '비주얼 방향': c.visual || '',
+    '캡션 초안':  c.caption || '',
+    '메모':       c.memo || '',
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [
+    { wch: 14 }, // 날짜
+    { wch: 8  }, // 계정
+    { wch: 14 }, // 라인 태그
+    { wch: 10 }, // 포맷
+    { wch: 36 }, // 제목
+    { wch: 36 }, // 훅
+    { wch: 30 }, // 해시태그
+    { wch: 30 }, // 비주얼
+    { wch: 40 }, // 캡션
+    { wch: 24 }, // 메모
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, '2026 틱톡 캘린더');
+  XLSX.writeFile(wb, 'EQQUALBERRY_2026_TikTok_Content_Calendar.xlsx');
+}
+
+// ─── FILTER (포맷별) ──────────────────────────────────────────────────────────
+const FILTER_CLASS = { 'all':'all', '숏폼':'short', '사운드밈':'sound', '브이로그':'vlog', '기타':'etc' };
+
+function filterFormat(fmt, btn) {
+  activeFormatFilter = fmt;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  btn.classList.add(`active-${FILTER_CLASS[fmt] || 'all'}`);
+  applyFormatFilter();
+}
+
+function applyFormatFilter() {
+  document.querySelectorAll('.content-card').forEach(card => {
+    if (activeFormatFilter === 'all' || card.dataset.format === activeFormatFilter) {
+      card.classList.remove('hidden-by-filter');
+    } else {
+      card.classList.add('hidden-by-filter');
+    }
+  });
+}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function autoResize(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(async () => {
+  populateUserSelect();
+  buildCalendar();
+  cards = await loadFromBin();
+  renderAll();
+  document.getElementById('loading-overlay').classList.add('hidden');
+  setStatus(BIN_READY ? 'saved' : 'error');
+})();
+</script>
+</body>
+</html>
