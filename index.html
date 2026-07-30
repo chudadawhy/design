@@ -211,10 +211,12 @@
     /* 카테고리별 색상 */
     .cat-trend { background: #1a2a1a; color: #4ade80; }
     .cat-instagram { background: #2a1a2a; color: #e879f9; }
+    .cat-tiktok { background: #2a1a1f; color: #fe6b85; }
     .cat-benchmark { background: #1a1e2a; color: #60a5fa; }
     .cat-other { background: #2a1e1a; color: #fb923c; }
     .tag-trend { background: #1a2a1a; color: #4ade80; }
     .tag-instagram { background: #2a1a2a; color: #e879f9; }
+    .tag-tiktok { background: #2a1a1f; color: #fe6b85; }
     .tag-benchmark { background: #1a1e2a; color: #60a5fa; }
     .tag-other { background: #2a1e1a; color: #fb923c; }
   </style>
@@ -237,6 +239,7 @@
     <button class="filter-btn active" data-filter="all">전체</button>
     <button class="filter-btn" data-filter="trend">트렌드</button>
     <button class="filter-btn" data-filter="instagram">인스타그램</button>
+    <button class="filter-btn" data-filter="tiktok">틱톡</button>
     <button class="filter-btn" data-filter="benchmark">벤치마킹</button>
     <button class="filter-btn" data-filter="other">기타</button>
   </div>
@@ -260,6 +263,7 @@
 
   const categoryConfig = {
     trend:     { icon: '📊', keywords: ['trend', '트렌드'], color: 'cat-trend', tag: 'tag-trend', label: '트렌드' },
+    tiktok:    { icon: '🎵', keywords: ['tiktok', 'tik_tok', '틱톡'], color: 'cat-tiktok', tag: 'tag-tiktok', label: '틱톡' },
     instagram: { icon: '📱', keywords: ['instagram', 'insta', '인스타', 'calendar', 'plan'], color: 'cat-instagram', tag: 'tag-instagram', label: '인스타그램' },
     benchmark: { icon: '🔍', keywords: ['benchmark', '벤치', 'brand', 'competitor'], color: 'cat-benchmark', tag: 'tag-benchmark', label: '벤치마킹' },
     other:     { icon: '📄', keywords: [], color: 'cat-other', tag: 'tag-other', label: '기타' },
@@ -335,7 +339,7 @@
 
     let html = '';
     const order = activeFilter === 'all'
-      ? ['trend', 'instagram', 'benchmark', 'other']
+      ? ['trend', 'instagram', 'tiktok', 'benchmark', 'other']
       : [activeFilter];
 
     order.forEach(cat => {
