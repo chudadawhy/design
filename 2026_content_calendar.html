@@ -414,6 +414,26 @@
   }
   .card-asana-dot:hover { text-decoration: underline; }
 
+  .card-asana-notes {
+    font-size: 8.5px;
+    line-height: 1.5;
+    color: #8a5a4a;
+    background: rgba(240,106,106,0.09);
+    border-left: 2px solid #F06A6A;
+    border-radius: 0 3px 3px 0;
+    padding: 3px 5px;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .card-asana-notes b {
+    display: block;
+    font-size: 7.5px;
+    letter-spacing: 0.04em;
+    color: #F06A6A;
+    margin-bottom: 1px;
+  }
+
   .card-title {
     font-size: 10px;
     font-weight: 700;
@@ -828,6 +848,12 @@
       <div class="modal-field full">
         <label>캡션 초안</label>
         <textarea id="modal-caption" placeholder="인스타그램 캡션 초안" style="min-height:80px;"></textarea>
+      </div>
+      <div class="modal-field full" id="modal-asana-notes-field" style="display:none;">
+        <label style="color:#F06A6A;">아사나 요청 내용 (읽기 전용)</label>
+        <div id="modal-asana-notes"
+             style="font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:#5a4038;background:#FFF6F6;border:1.5px solid #F9D4D4;border-radius:6px;padding:9px 11px;max-height:150px;overflow-y:auto;"></div>
+        <p style="font-size:9px;color:#aaa;margin-top:4px;">아사나에서 수정하면 이 내용도 자동으로 갱신됩니다.</p>
       </div>
       <div class="modal-field full">
         <label>메모 / 진행 상황</label>
@@ -1297,6 +1323,7 @@ function createCardEl(card) {
     <div class="card-title" contenteditable="true" data-placeholder="제목">${escHtml(card.title)}</div>
     <hr class="card-divider">
     <div class="card-hook" contenteditable="true" data-placeholder="훅 / 핵심 메시지">${escHtml(card.hook)}</div>
+    ${card.asanaNotes ? `<div class="card-asana-notes"><b>아사나 요청 내용</b>${escHtml(card.asanaNotes)}${card.asanaAssignee ? `\n담당: ${escHtml(card.asanaAssignee)}` : ''}</div>` : ''}
     <div class="card-actions">
       <button class="card-btn" data-action="edit">✏️ 편집</button>
       <button class="card-btn" data-action="copy">⧉ 복사</button>
@@ -1316,7 +1343,18 @@ function createCardEl(card) {
   titleDiv.addEventListener('dragstart', e => e.preventDefault());
   titleDiv.addEventListener('blur', () => {
     const c = cards.find(c => c.id === card.id);
-    if (c) { c.title = titleDiv.innerText.trim(); markDirty(); }
+    if (!c) return;
+    const newTitle = titleDiv.innerText.trim();
+    if (newTitle !== c.title) {
+      c.title = newTitle;
+      // 아사나 카드의 제목을 직접 고쳤으면 잠가서 동기화가 되돌리지 않게 한다
+      if (c.asanaTaskId) {
+        const locked = new Set(c.lockedFields || []);
+        locked.add('title');
+        c.lockedFields = [...locked];
+      }
+      markDirty();
+    }
   });
 
   const hookDiv = el.querySelector('.card-hook');
@@ -1433,6 +1471,16 @@ function openEditModal(cardId) {
     asanaRow.style.display = 'none';
   }
 
+  const notesField = document.getElementById('modal-asana-notes-field');
+  if (card.asanaNotes) {
+    let txt = card.asanaNotes;
+    if (card.asanaAssignee) txt += `\n\n담당: ${card.asanaAssignee}`;
+    document.getElementById('modal-asana-notes').textContent = txt;
+    notesField.style.display = 'block';
+  } else {
+    notesField.style.display = 'none';
+  }
+
   document.getElementById('modal-overlay').classList.add('open');
 }
 
@@ -1445,6 +1493,7 @@ function openNewModal(date) {
   });
   document.getElementById('modal-tag').value = 'tag-etc';
   document.getElementById('modal-asana-row').style.display = 'none';
+  document.getElementById('modal-asana-notes-field').style.display = 'none';
   document.getElementById('modal-overlay').dataset.newDate = date;
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -1471,7 +1520,19 @@ function saveModal() {
     cards.push({ id: 'c' + Date.now(), date, ...data });
   } else {
     const card = cards.find(c => c.id === editingCardId);
-    if (card) Object.assign(card, data);
+    if (card) {
+      // 아사나에서 온 카드를 사람이 직접 고친 항목은 잠가둔다.
+      // 이후 아사나 동기화가 그 값을 덮어쓰지 않도록 하기 위함.
+      if (card.asanaTaskId) {
+        const locked = new Set(card.lockedFields || []);
+        if (data.account !== card.account) locked.add('account');
+        if (data.tag !== card.tag) locked.add('tag');
+        if (data.format !== card.format) locked.add('format');
+        if (data.title !== card.title) locked.add('title');
+        card.lockedFields = [...locked];
+      }
+      Object.assign(card, data);
+    }
   }
   markDirty(); renderAll(); closeModal();
 }
@@ -1500,6 +1561,7 @@ function exportToXLSX() {
     '비주얼 방향': c.visual || '',
     '캡션 초안':  c.caption || '',
     '메모':       c.memo || '',
+    '아사나 요청 내용': c.asanaNotes || '',
     '아사나 링크': c.asanaUrl || '',
   }));
 
@@ -1516,6 +1578,7 @@ function exportToXLSX() {
     { wch: 30 }, // 비주얼
     { wch: 40 }, // 캡션
     { wch: 24 }, // 메모
+    { wch: 34 }, // 아사나 요청 내용
     { wch: 46 }, // 아사나 링크
   ];
 
