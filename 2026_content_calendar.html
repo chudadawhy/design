@@ -404,6 +404,16 @@
     line-height: 1;
   }
 
+  .card-asana-dot {
+    font-size: 8px;
+    font-weight: 700;
+    color: #F06A6A;
+    text-decoration: none;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .card-asana-dot:hover { text-decoration: underline; }
+
   .card-title {
     font-size: 10px;
     font-weight: 700;
@@ -762,6 +772,12 @@
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h2 id="modal-heading">콘텐츠 편집</h2>
+    <div id="modal-asana-row" style="display:none;margin:-8px 0 14px;">
+      <a id="modal-asana-link" href="#" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#F06A6A;text-decoration:none;border:1.5px solid #F9D4D4;background:#FFF6F6;border-radius:5px;padding:5px 9px;">
+        ◇ 아사나 업무요청 열기
+      </a>
+    </div>
     <div class="modal-grid">
       <div class="modal-field">
         <label>계정</label>
@@ -1205,7 +1221,11 @@ function buildCalendar() {
     e.preventDefault(); pool.style.background = '';
     if (dragCardId) {
       const card = cards.find(c => c.id === dragCardId);
-      if (card) { card.date = 'unscheduled'; markDirty(); renderAll(); }
+      if (card) {
+        card.date = 'unscheduled';
+        if (card.asanaTaskId) card.dateLockedByUser = true;
+        markDirty(); renderAll();
+      }
     }
   });
 }
@@ -1217,7 +1237,12 @@ function setupDropTarget(el, date) {
     e.preventDefault(); el.classList.remove('drag-over');
     if (dragCardId) {
       const card = cards.find(c => c.id === dragCardId);
-      if (card) { card.date = date; markDirty(); renderAll(); }
+      if (card) {
+        card.date = date;
+        // 아사나에서 온 카드를 사람이 직접 옮겼으면, 이후 동기화 때 날짜를 덮어쓰지 않도록 잠금
+        if (card.asanaTaskId) card.dateLockedByUser = true;
+        markDirty(); renderAll();
+      }
     }
   });
 }
@@ -1265,6 +1290,7 @@ function createCardEl(card) {
       ${escHtml(card.tagLabel)}
       <span class="card-format-badge">${escHtml(card.format)}</span>
       <span class="card-tag-right">
+        ${card.asanaUrl ? `<a class="card-asana-dot" href="${escHtml(card.asanaUrl)}" target="_blank" rel="noopener" title="아사나에서 등록된 업무요청 — 클릭하면 아사나로 이동">◇A</a>` : ''}
         <span class="card-memo-dot" title="메모 있음" style="display:${card.memo ? 'inline' : 'none'}">📝</span>
       </span>
     </div>
@@ -1312,6 +1338,13 @@ function createCardEl(card) {
       markDirty();
     }
   });
+
+  const asanaLink = el.querySelector('.card-asana-dot');
+  if (asanaLink) {
+    asanaLink.addEventListener('mousedown', e => e.stopPropagation());
+    asanaLink.addEventListener('dragstart', e => e.preventDefault());
+    asanaLink.addEventListener('click', e => e.stopPropagation());
+  }
 
   const mentionRow = el.querySelector('.mention-row');
   renderMentions(card, mentionRow);
@@ -1391,6 +1424,15 @@ function openEditModal(cardId) {
   document.getElementById('modal-visual').value = card.visual || '';
   document.getElementById('modal-caption').value = card.caption || '';
   document.getElementById('modal-memo').value = card.memo || '';
+
+  const asanaRow = document.getElementById('modal-asana-row');
+  if (card.asanaUrl) {
+    document.getElementById('modal-asana-link').href = card.asanaUrl;
+    asanaRow.style.display = 'block';
+  } else {
+    asanaRow.style.display = 'none';
+  }
+
   document.getElementById('modal-overlay').classList.add('open');
 }
 
@@ -1401,7 +1443,8 @@ function openNewModal(date) {
     const el = document.getElementById(id);
     el.value = id === 'modal-format' ? '릴스' : '';
   });
-  document.getElementById('modal-tag').value = 'tag-brand';
+  document.getElementById('modal-tag').value = 'tag-etc';
+  document.getElementById('modal-asana-row').style.display = 'none';
   document.getElementById('modal-overlay').dataset.newDate = date;
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -1457,6 +1500,7 @@ function exportToXLSX() {
     '비주얼 방향': c.visual || '',
     '캡션 초안':  c.caption || '',
     '메모':       c.memo || '',
+    '아사나 링크': c.asanaUrl || '',
   }));
 
   const ws = XLSX.utils.json_to_sheet(rows);
@@ -1472,6 +1516,7 @@ function exportToXLSX() {
     { wch: 30 }, // 비주얼
     { wch: 40 }, // 캡션
     { wch: 24 }, // 메모
+    { wch: 46 }, // 아사나 링크
   ];
 
   const wb = XLSX.utils.book_new();
