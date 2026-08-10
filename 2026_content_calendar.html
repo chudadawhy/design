@@ -823,7 +823,7 @@
       <div class="modal-field">
         <label>라인 태그</label>
         <select id="modal-tag">
-          <option value="tag-vita">비타라인</option>
+          <option value="tag-vita">비타</option>
           <option value="tag-hyaltoin">히알토인</option>
           <option value="tag-aloe">알로에</option>
           <option value="tag-bakuchiol">바쿠치올</option>
@@ -913,7 +913,7 @@ const MONTHS = [
 ];
 
 const TAG_LABELS = {
-  'tag-vita':'비타라인',
+  'tag-vita':'비타',
   'tag-hyaltoin':'히알토인',
   'tag-aloe':'알로에',
   'tag-bakuchiol':'바쿠치올',
@@ -1313,7 +1313,7 @@ function createCardEl(card) {
 
   el.innerHTML = `
     <div class="card-tag">
-      ${escHtml(card.tagLabel)}
+      ${escHtml(TAG_LABELS[card.tag] || card.tagLabel)}
       <span class="card-format-badge">${escHtml(card.format)}</span>
       <span class="card-tag-right">
         ${card.asanaUrl ? `<a class="card-asana-dot" href="${escHtml(card.asanaUrl)}" target="_blank" rel="noopener" title="아사나에서 등록된 업무요청 — 클릭하면 아사나로 이동">◇A</a>` : ''}
@@ -1554,7 +1554,7 @@ function exportToXLSX() {
   const rows = sorted.map(c => ({
     '날짜':       c.date === 'unscheduled' ? '미배정' : c.date,
     '계정':       ACCOUNT_LABEL[c.account] || c.account || 'Global',
-    '라인 태그':  c.tagLabel || '',
+    '라인 태그':  TAG_LABELS[c.tag] || c.tagLabel || '',
     '포맷':       c.format || '',
     '콘텐츠 제목': c.title || '',
     '훅 / 핵심 메시지': c.hook || '',
