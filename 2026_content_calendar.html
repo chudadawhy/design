@@ -65,6 +65,24 @@
   #save-status.saving { color: #F5A623; }
   #save-status.saved  { color: #4CAF50; }
   #save-status.error  { color: #E33; }
+  #save-status.blocked { color: #E33; font-weight: 700; }
+
+  #load-error-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 10000;
+    background: #B3261E;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+  }
+  #load-error-bar b { font-weight: 700; }
+  #load-error-bar span { opacity: 0.95; }
 
   .btn-save-now {
     font-size: 11px;
@@ -995,22 +1013,52 @@ let editingCardId = null;
 let saveTimer = null;
 
 // ─── JSONBIN ──────────────────────────────────────────────────────────────────
+// 데이터를 정상적으로 불러왔는지 여부.
+// 불러오기에 실패한 상태에서 저장하면 실제 데이터가 샘플 데이터로 덮어써지므로,
+// 이 값이 false이면 저장을 전면 차단한다.
+let loadedOk = false;
+
 async function loadFromBin() {
   try {
     const res = await fetch(`${BIN_URL}/latest`, { headers: HEADERS_READ });
     if (!res.ok) throw new Error(res.status);
     const json = await res.json();
     const data = json.record;
-    if (Array.isArray(data)) return data.length ? data : DEFAULT_CARDS;
-    if (data && Array.isArray(data.cards)) return data.cards.length ? data.cards : DEFAULT_CARDS;
-    return DEFAULT_CARDS;
+    let result = null;
+    if (Array.isArray(data)) result = data;
+    else if (data && Array.isArray(data.cards)) result = data.cards;
+
+    if (result) {
+      loadedOk = true;               // 정상 로드 (빈 배열이어도 정상)
+      return result.length ? result : DEFAULT_CARDS;
+    }
+    throw new Error('unexpected data shape');
   } catch (e) {
     console.error('Load error:', e);
+    loadedOk = false;
+    showLoadFailure(e);
     return DEFAULT_CARDS;
   }
 }
 
+function showLoadFailure(err) {
+  const bar = document.createElement('div');
+  bar.id = 'load-error-bar';
+  bar.innerHTML = `
+    <b>⚠️ 저장소에서 데이터를 불러오지 못했습니다 (${escHtml(String(err))})</b>
+    <span>지금 보이는 카드는 실제 데이터가 아닌 <b>샘플</b>입니다.
+    데이터 보호를 위해 <b>저장이 차단</b>되었습니다. 편집하지 마시고 페이지를 새로고침하거나 담당자에게 알려주세요.</span>`;
+  document.body.appendChild(bar);
+}
+
 async function saveToBin() {
+  // 데이터를 못 불러온 상태에서는 절대 저장하지 않는다.
+  // (샘플 데이터로 실제 데이터를 덮어쓰는 사고 방지)
+  if (!loadedOk) {
+    console.warn('저장 차단: 데이터 로드에 실패한 상태입니다.');
+    setStatus('blocked');
+    return;
+  }
   setStatus('saving');
   document.getElementById('btn-save-now').disabled = true;
   try {
@@ -1035,6 +1083,7 @@ function setStatus(s) {
   if (s === 'saving') el.textContent = '저장 중...';
   else if (s === 'saved') el.textContent = '✓ 저장됨';
   else if (s === 'error') el.textContent = '⚠ 저장 실패';
+  else if (s === 'blocked') el.textContent = '🔒 저장 차단됨';
   else el.textContent = '—';
 }
 
